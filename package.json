@@ -22,6 +22,10 @@
   },
   "homepage": "https://github.com/LtCocoa/middle.messenger.praktikum.yandex#readme",
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.0.0-nightly.752",
     "parcel": "^2.0.0-nightly.750"
+  },
+  "dependencies": {
+    "sass": "^1.35.1"
   }
 }
