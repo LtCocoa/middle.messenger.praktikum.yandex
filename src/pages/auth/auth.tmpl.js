@@ -4,16 +4,18 @@ import './auth.css';
 const template = `
   <main class="form">
     <h1 class="form__caption">Вход</h1>
-    <div class="form__field">
+    <div class="form-field">
       <label class="form-field__label">Логин</label>
-      <input class="input text" type="text" name="login" />
+      <input class="form-field__input" type="text" name="login" />
     </div>
-    <div class="form__field">
+    <div class="form-field">
       <label class="form-field__label">Пароль</label>
-      <input class="input text" type="password" name="password" />
+      <input class="form-field__input" type="password" name="password" />
     </div>
-    <button class="input button primary">Авторизоваться</button>
-    <button class="input button">Нет аккаунта?</button>
+    <div class="form-controls">
+      <button class="form-controls__button primary">Авторизоваться</button>
+      <button class="form-controls__button">Нет аккаунта?</button>
+    </div>
   </main>
 `;
 
