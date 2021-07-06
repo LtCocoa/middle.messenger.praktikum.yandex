@@ -4,6 +4,4 @@ import profileTemplate from './pages/profile/profile.tmpl';
 import './index.scss';
 
 const root = document.querySelector('#root');
-root.innerHTML = profileTemplate;
-
-console.log('hello world');
+root.innerHTML = authTemplate;
