@@ -39,4 +39,5 @@ const template = `
 `;
 
 const registrationTemplate = new Templator(template);
-export default renderedRegistrationTemplate = registrationTemplate.compile();
+const renderedRegistrationTemplate = registrationTemplate.compile();
+export default renderedRegistrationTemplate;

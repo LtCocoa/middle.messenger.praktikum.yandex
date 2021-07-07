@@ -20,4 +20,5 @@ const template = `
 `;
 
 const authTemplate = new Templator(template);
-export default renderedAuthTemplate = authTemplate.compile();
+const renderedAuthTemplate = authTemplate.compile();
+export default renderedAuthTemplate;
