@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e714ea25-5822-4046-9cd8-ab71116d0319/deploy-status)](https://app.netlify.com/sites/nifty-mccarthy-040682/deploys)
+
 ## Чат-приложение
 
 - ### [pull request]()
