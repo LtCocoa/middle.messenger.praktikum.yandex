@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/LtCocoa/middle.messenger.praktikum.yandex#readme",
   "devDependencies": {
-    "@parcel/transformer-image": "^2.0.0-nightly.2384",
     "@parcel/transformer-sass": "^2.0.0-nightly.762",
     "parcel": "^2.0.0-nightly.760"
   },
