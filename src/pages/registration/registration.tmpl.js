@@ -1,8 +1,9 @@
-import Templator from '../../templator/Templator';
-
 const template = `
   <main class="form">
-    <h1 class="form__caption">Регистрация</h1>
+    <div class="form-header">
+      <h1 class="form-header__caption">Вход</h1>
+      <h1 class="form-header__caption active">Регистрация</h1>
+    </div>
     <div class="form-field">
       <label class="form-field__label">Почта</label>
       <input class="form-field__input" type="email" name="email" />
@@ -38,6 +39,4 @@ const template = `
   </main>
 `;
 
-const registrationTemplate = new Templator(template);
-const renderedRegistrationTemplate = registrationTemplate.compile();
-export default renderedRegistrationTemplate;
+export default template;

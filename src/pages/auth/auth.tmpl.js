@@ -1,9 +1,9 @@
-import Templator from '../../templator/Templator';
-import './auth.css';
-
 const template = `
   <main class="form">
-    <h1 class="form__caption">Вход</h1>
+    <div class="form-header">
+      <h1 class="form-header__caption active">Вход</h1>
+      <h1 class="form-header__caption">Регистрация</h1>
+    </div>
     <div class="form-field">
       <label class="form-field__label">Логин</label>
       <input class="form-field__input" type="text" name="login" />
@@ -19,6 +19,4 @@ const template = `
   </main>
 `;
 
-const authTemplate = new Templator(template);
-const renderedAuthTemplate = authTemplate.compile();
-export default renderedAuthTemplate;
+export default template;
