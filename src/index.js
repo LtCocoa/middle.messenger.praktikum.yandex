@@ -7,4 +7,4 @@ import error500Template from './pages/errors/500';
 import './css/index.scss';
 
 const root = document.querySelector('#root');
-root.innerHTML = authTemplate;
+root.innerHTML = profileTemplate;
