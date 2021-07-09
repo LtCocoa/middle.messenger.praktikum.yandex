@@ -2,7 +2,7 @@
 
 ## Чат-приложение
 
-- ### [pull request]()
+- ### [pull request](https://github.com/LtCocoa/middle.messenger.praktikum.yandex/pull/1)
 - ### [макет приложения в Figma](https://www.figma.com/file/NdHWI3MhrmSBIHKOaqHL59/chat-app?node-id=0%3A1)
 - ### [деплой на Netlify](https://nifty-mccarthy-040682.netlify.app/)
 
@@ -14,11 +14,11 @@ npm install
 ```
 npm run build
 ```
-### Запуск express сервера
+### Запуск сервера разработки
 ```
 npm start
 ```
-### Запуск сервера разработки
+### Запуск express сервера
 ```
-npm run dev
+npm run start-server
 ```
