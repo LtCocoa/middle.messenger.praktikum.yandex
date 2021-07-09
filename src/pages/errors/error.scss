@@ -1,0 +1,28 @@
+@import '../../css/variables.scss';
+
+.error-page {
+  width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  font-weight: 500;
+
+  .error-page__code {
+    font-size: 90px;
+    letter-spacing: 8px;
+    color: $font-caption-dark;
+  }
+
+  .error-page__caption {
+    font-size: 22px;
+    color: $font-caption-dark;
+  }
+
+  .error-page__button {
+    color: $base-color;
+    cursor: pointer;
+    border: 0;
+    background-color: unset;
+    text-align: left;
+    margin-top: 50px;
+  }
+}
