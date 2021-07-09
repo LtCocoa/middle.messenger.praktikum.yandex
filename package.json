@@ -19,10 +19,7 @@
   },
   "homepage": "https://github.com/LtCocoa/middle.messenger.praktikum.yandex#readme",
   "devDependencies": {
-    "@parcel/transformer-image": "^2.0.0-nightly.2384",
-    "@parcel/transformer-sass": "^2.0.0-nightly.762",
-    "parcel": "^2.0.0-nightly.760",
-    "sharp": "^0.28.3"
+    "parcel-bundler": "^1.12.5"
   },
   "dependencies": {
     "express": "^4.17.1",
