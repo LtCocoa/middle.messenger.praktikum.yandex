@@ -4,8 +4,8 @@
   "description": "---",
   "scripts": {
     "build": "parcel build index.html",
-    "start": "node src/server.js",
-    "dev": "parcel index.html"
+    "start-server": "node src/server.js",
+    "start": "parcel index.html --port 3000"
   },
   "repository": {
     "type": "git",
