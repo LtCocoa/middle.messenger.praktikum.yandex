@@ -1,0 +1,113 @@
+@import './variables.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  outline: none;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+body {
+  height: 100vh;
+
+  #root {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.form {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  width: 400px;
+  margin: 0 auto;
+  justify-content: center;
+  padding: 25px;
+  background-color: $background-light;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.288);
+  border-radius: 15px;
+
+  .form-header {
+    display: flex;
+    justify-content: space-evenly;
+
+    .form-header__caption {
+      text-align: center;
+      font-size: 28px;
+      margin: 15px 0;
+      color: $font-text-dark;
+      cursor: pointer;
+
+      &.active {
+        color: $font-caption-dark;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          width: calc(100% + 6px);
+          border-bottom: 1px solid $base-color-dim;
+          border-radius: 30%;
+          bottom: -5px;
+          left: -3px;
+          box-shadow: 0 2px 5px $base-color;
+        }
+      }
+    }
+  }
+
+  .form-controls {
+    display: flex;
+    flex-direction: column;
+    margin: 50px 0 20px;
+
+    .form-controls__button {
+      cursor: pointer;
+      color: $base-color;
+      border-radius: 7px;
+      margin: 5px 0;
+      padding: 5px;
+      border: 0;
+      background-color: unset;
+
+      &:focus {
+        box-shadow: 0 0 3px rgb(58, 58, 58);
+      }
+
+      &.primary {
+        background-color: $base-color;
+        color: aliceblue;
+      }
+    }
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0;
+
+    .form-field__input {
+      padding: 5px 10px;
+      color: $font-caption-dark;
+      border-radius: 5px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      background-color: $background-gray;
+      transition: border-color .1s ease-out;
+
+      &:focus {
+        border-color: $base-color;
+      }
+    }
+    
+    .form-field__label {
+      color: $font-text-dark;
+      font-size: 14px;
+      padding: 5px;
+    }
+  }
+}

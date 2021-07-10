@@ -1,0 +1,28 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "---",
+  "scripts": {
+    "build": "parcel build index.html",
+    "start-server": "node src/server.js",
+    "start": "parcel index.html --port 3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LtCocoa/middle.messenger.praktikum.yandex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LtCocoa/middle.messenger.praktikum.yandex/issues"
+  },
+  "homepage": "https://github.com/LtCocoa/middle.messenger.praktikum.yandex#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "sass": "^1.35.1"
+  }
+}
