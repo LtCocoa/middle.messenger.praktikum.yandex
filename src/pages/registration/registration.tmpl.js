@@ -1,9 +1,13 @@
 const template = `
   <main class="form">
-    <div class="form-header">
-      <h1 class="form-header__caption">Вход</h1>
-      <h1 class="form-header__caption active">Регистрация</h1>
-    </div>
+    <ul class="form-header">
+      <li class="form-header__item">
+        <h1 class="form-header__caption">Вход</h1>
+      </li>
+      <li class="form-header__item">
+        <h1 class="form-header__caption form-header__caption_active">Регистрация</h1>
+      </li>
+    </ul>
     <div class="form-field">
       <label class="form-field__label">Почта</label>
       <input class="form-field__input" type="email" name="email" />
@@ -33,8 +37,8 @@ const template = `
       <input class="form-field__input" type="password" name="password" />
     </div>
     <div class="form-controls">
-      <button class="form-controls__button primary">Зарегистрироваться</button>
-      <button class="form-controls__button">Войти</button>
+      <button class="form-controls__button primary" type="button">Зарегистрироваться</button>
+      <button class="form-controls__button" type="button">Войти</button>
     </div>
   </main>
 `;

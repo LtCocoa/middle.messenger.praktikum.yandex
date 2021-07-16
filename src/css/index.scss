@@ -35,6 +35,7 @@ body {
   .form-header {
     display: flex;
     justify-content: space-evenly;
+    list-style: none;
 
     .form-header__caption {
       text-align: center;
@@ -42,21 +43,21 @@ body {
       margin: 15px 0;
       color: $font-text-dark;
       cursor: pointer;
+    }
 
-      &.active {
-        color: $font-caption-dark;
-        position: relative;
+    .form-header__caption_active {
+      color: $font-caption-dark;
+      position: relative;
 
-        &::after {
-          content: '';
-          position: absolute;
-          width: calc(100% + 6px);
-          border-bottom: 1px solid $base-color-dim;
-          border-radius: 30%;
-          bottom: -5px;
-          left: -3px;
-          box-shadow: 0 2px 5px $base-color;
-        }
+      &::after {
+        content: '';
+        position: absolute;
+        width: calc(100% + 6px);
+        border-bottom: 1px solid $base-color-dim;
+        border-radius: 30%;
+        bottom: -5px;
+        left: -3px;
+        box-shadow: 0 2px 5px $base-color;
       }
     }
   }

@@ -31,8 +31,8 @@ const template = `
       </div>
     </div>
     <div class="profile-controls">
-      <button class="profile-controls__button">Изменить пароль</button>
-      <button class="profile-controls__button red">Выйти</button>
+      <button class="profile-controls__button" type="button">Изменить пароль</button>
+      <button class="profile-controls__button red" type="button">Выйти</button>
     </div>
   </main>
 `;
