@@ -6,5 +6,5 @@ import error404Template from './pages/errors/404';
 import error500Template from './pages/errors/500';
 import './css/index.scss';
 
-const root = document.querySelector('#root');
-root.innerHTML = registerTemplate;
+const root: HTMLElement = document.querySelector('#root');
+root.innerHTML = chatTemplate;

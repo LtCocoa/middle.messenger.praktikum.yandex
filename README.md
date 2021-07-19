@@ -22,3 +22,11 @@ npm start
 ```
 npm run start-server
 ```
+### Запуск линтера
+```
+npm run lint
+```
+### Запуск линтера с исправлением ошибок
+```
+npm run lint-fix
+```
