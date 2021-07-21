@@ -14,10 +14,10 @@ export default class Templator {
 
   _compileTemplate(ctx: object): string {
     let tmpl: string = this._template;
-    let key: RegExpExecArray = null;
+    let key: RegExpExecArray | null = null;
     const regExp: RegExp = this.TEMPLATE_REGEXP;
 
-    while ((key = regExp.exec(tmpl))) {
+    while (key = regExp.exec(tmpl)) {
       if (key[1]) {
         const tmplValue: string = key[1].trim();
         const data = get(ctx, tmplValue);
@@ -37,4 +37,32 @@ export default class Templator {
 
     return tmpl;
   }
+}
+
+export const compile = (template: string, ctx: object): string => {
+  const TEMPLATE_REGEXP: RegExp = /\{\{(.*?)\}\}/gi;
+
+  let tmpl: string = template;
+  let key: RegExpExecArray | null = null;
+  const regExp: RegExp = TEMPLATE_REGEXP;
+
+  while (key = regExp.exec(tmpl)) {
+    if (key[1]) {
+      const tmplValue: string = key[1].trim();
+      const data = get(ctx, tmplValue);
+
+      if (typeof data === 'function') {
+        window[tmplValue] = data;
+        tmpl = tmpl.replace(
+          new RegExp(key[0], 'gi'),
+          `window.${key[1].trim()}()`
+        );
+        continue;
+      }
+
+      tmpl = tmpl.replace(new RegExp(key[0], 'gi'), data);
+    }
+  }
+
+  return tmpl;
 }
