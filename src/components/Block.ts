@@ -1,4 +1,5 @@
 import EventBus from '../utils/EventBus';
+import { v4 } from 'uuid';
 
 export default class Block {
   static EVENTS: {
@@ -10,7 +11,8 @@ export default class Block {
     RENDER: 'render',
   }
 
-  _element: HTMLElement | null = null;
+  _element: Node | null = null;
+  _id: string;
 
   _meta: {
     tagName: string,
@@ -30,7 +32,8 @@ export default class Block {
     }
 
     this.props = this._makeProxyProps(props);
-
+    
+    this._id = v4();
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
   }
@@ -48,8 +51,10 @@ export default class Block {
     // Используйте шаблонизатор из npm или напишите свой безопасный
     // Нужно не в строку компилировать (или делать это правильно),
     // либо сразу в DOM-элементы возвращать из compile DOM-ноду
+
     if (this._element) {
       this._element.innerHTML = block;
+      this._addEvents();
     }
   }
 
@@ -57,7 +62,7 @@ export default class Block {
     return new Proxy(props, {
       set: (target: Record<string, any>, prop: string, value: any) => {
         target[prop] = value;
-        // emit here
+        this.eventBus().emit(Block.EVENTS.COMPONENT_DID_UPDATE);
         return true;
       },
       deleteProperty: () => {
@@ -66,14 +71,29 @@ export default class Block {
     });
   }
 
+  _addEvents() {
+    const {events = {}} = this.props;
+
+    Object.keys(events).forEach(eventName => {
+      window.addEventListener(eventName, (event) => {
+        const uuid = (event.target as HTMLElement).getAttribute('uuid');
+        if (uuid === this._id) {
+          event.stopPropagation();
+          const handler = events[eventName].bind(this);
+          handler();
+        }
+      });
+    });
+  }
+
   _createDocumentElement(tagName: string): HTMLElement {
     return document.createElement(tagName);
   }
 
   _componentDidUpdate(oldProps: object, newProps: object) {
-    const response = this.componentDidUpdate(oldProps, newProps);
-    if (response) {
-      this._render();
+    const didUpate = this.componentDidUpdate(oldProps, newProps);
+    if (didUpate) {
+      this.eventBus().emit(Block.EVENTS.RENDER);
     }
   }
 
@@ -101,6 +121,10 @@ export default class Block {
 
   getContent() {
     return this.element;
+  }
+
+  getHTML(): string {
+    return (this.getContent() as HTMLElement).outerHTML;
   }
 
   render(): any {}

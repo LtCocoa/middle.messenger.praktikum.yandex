@@ -2,10 +2,11 @@
   "name": "middle.messenger.praktikum.yandex",
   "version": "1.0.0",
   "description": "---",
+  "main": "index.ts",
   "scripts": {
     "build": "parcel build index.html",
     "start-server": "node src/server.js",
-    "start": "parcel index.html --port 3000",
+    "start": "parcel index.html --port 3000 --no-cache",
     "lint": "eslint src/**",
     "lint-fix": "eslint src/** --fix",
     "clean": "rm -rf dist"
@@ -31,6 +32,8 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "sass": "^1.35.1"
+    "handlebars": "^4.7.7",
+    "sass": "^1.35.1",
+    "uuid": "^8.3.2"
   }
 }
