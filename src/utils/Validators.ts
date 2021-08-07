@@ -26,7 +26,7 @@ export const validatePhoneNumber = (event: Event): boolean => {
   const regExp = /^[0-9]{11}/i;
   const value = event?.target?.value;
   return regExp.test(value);
-}
+};
 
 export const checkValidation = (
   targetId: string,
@@ -40,5 +40,5 @@ export const checkValidation = (
     } else {
       target?.classList.toggle(className, false);
     }
-  }
+  };
 };

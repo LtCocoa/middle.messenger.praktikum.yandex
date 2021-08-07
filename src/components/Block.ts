@@ -29,7 +29,7 @@ export default class Block {
     this._meta = {
       tagName,
       props
-    }
+    };
 
     this.props = this._makeProxyProps(props);
     

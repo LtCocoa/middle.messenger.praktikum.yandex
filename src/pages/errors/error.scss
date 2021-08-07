@@ -17,12 +17,9 @@
     color: $font-caption-dark;
   }
 
-  .error-page__button {
+  .error-page__link {
     color: $base-color;
-    cursor: pointer;
-    border: 0;
-    background-color: unset;
-    text-align: left;
     margin-top: 50px;
+    text-decoration: none;
   }
 }
