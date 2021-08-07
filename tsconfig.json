@@ -10,5 +10,5 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true
-  },
+  }
 }
