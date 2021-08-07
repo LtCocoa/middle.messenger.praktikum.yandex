@@ -1,4 +1,4 @@
-const template = `
+export default `
   <main class="profile">
     <div class="profile-image-wrapper">
       <img src="{{image}}" width="150" class="profile-image-wrapper__image" />
@@ -36,5 +36,3 @@ const template = `
     </div>
   </main>
 `;
-
-export default template;

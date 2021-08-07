@@ -1,44 +1,47 @@
-// import authTemplate from './pages/auth/auth.tmpl';
-// import registerTemplate from './pages/registration/registration';
-// import profileTemplate from './pages/profile/profile';
-// import chatTemplate from './pages/chat/chat';
-// import error404Template from './pages/errors/404';
-// import error500Template from './pages/errors/500';
-
-import Button from './components/Button';
-import Handlebars from 'handlebars';
+import auth from './pages/auth/auth';
+import registration from './pages/registration/registration';
+import profile from './pages/profile/profile';
+import chat from './pages/chat/chat';
+import error404 from './pages/errors/404';
+import error500 from './pages/errors/500';
 
 import './css/index.scss';
 
 const root: HTMLElement | null = document.querySelector('#root');
-// root.innerHTML = chatTemplate;
 
-const button = new Button({
-  text: 'click',
-  events: {
-    click: function() {
-      console.log(this);
-    }
-  }
+root?.addEventListener('submit', (event: Event) => {
+  event.preventDefault();
+  const inputs = Array.from(root.querySelectorAll('input'));
+  const formData = inputs.reduce((data: any, input: HTMLInputElement) => {
+    data[input['name']] = input.value;
+    return data;
+  }, {});
+  console.log(formData);
 });
 
-setTimeout(() => {
-  button.setProps({
-    text: 'OK'
-  });
-}, 3000);
+const setPage = (pageTmpl: string): void => {
+  if (root) {
+    root.innerHTML = pageTmpl;
+  }
+};
 
-const tmpl = `
-  <div class="wrapper">
-    {{{ button }}}
-    <div>
-      <span>div</span>
-    </div>
-  </div>
-`;
-
-const template = Handlebars.compile(tmpl);
-
-root?.innerHTML = template({ button: button.getHTML() });
-
-// root?.appendChild(c);
+switch (window.location.pathname) {
+  case '/':
+    setPage(auth);
+    break;
+  case '/registration':
+    setPage(registration);
+    break;
+  case '/profile':
+    setPage(profile);
+    break;
+  case '/chat':
+    setPage(chat);
+    break;
+  case '/500':
+    setPage(error500);
+    break;
+  default:
+    setPage(error404);
+    break;
+}

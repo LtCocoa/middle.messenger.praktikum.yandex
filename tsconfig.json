@@ -9,5 +9,6 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true
   },
 }

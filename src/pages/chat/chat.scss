@@ -4,6 +4,24 @@
   display: flex;
 
   .chat-contacts {
-    width: 350px;
+    width: 310px;
+
+    .search-panel {
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #222429;
+
+      .search-panel__input {
+        width: 290px;
+        border-radius: 5px;
+        line-height: 23px;
+        padding: 0 15px;
+        background-color: #3C3C3C;
+        border: none;
+        color: #999999;
+      }
+    }
   }
 }

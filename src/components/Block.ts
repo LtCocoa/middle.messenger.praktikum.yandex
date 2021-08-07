@@ -11,7 +11,7 @@ export default class Block {
     RENDER: 'render',
   }
 
-  _element: Node | null = null;
+  _element: HTMLElement | null = null;
   _id: string;
 
   _meta: {
@@ -47,10 +47,6 @@ export default class Block {
 
   _render() {
     const block = this.render();
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
 
     if (this._element) {
       this._element.innerHTML = block;
@@ -72,17 +68,16 @@ export default class Block {
   }
 
   _addEvents() {
-    const {events = {}} = this.props;
+    const { events = {} } = this.props;
 
     Object.keys(events).forEach(eventName => {
-      window.addEventListener(eventName, (event) => {
+      document.addEventListener(eventName, (event) => {
         const uuid = (event.target as HTMLElement).getAttribute('uuid');
         if (uuid === this._id) {
-          event.stopPropagation();
           const handler = events[eventName].bind(this);
-          handler();
+          handler(event);
         }
-      });
+      }, true);
     });
   }
 
@@ -124,7 +119,7 @@ export default class Block {
   }
 
   getHTML(): string {
-    return (this.getContent() as HTMLElement).outerHTML;
+    return (this.getContent() as HTMLElement).innerHTML;
   }
 
   render(): any {}

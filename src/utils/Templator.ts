@@ -1,4 +1,4 @@
-import { get } from './utils';
+import { get } from './Utils';
 import Block from '../components/Block';
 
 export const compile = (template: string, ctx: object): Node | null => {
