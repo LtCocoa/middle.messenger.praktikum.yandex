@@ -17,10 +17,10 @@ function queryStringify(data: object): string {
 }
 
 type RequestOptions = {
-  headers?: object,
-  method?: METHODS,
-  data?: any,
-  timeout?: number
+  headers?: object;
+  method?: METHODS;
+  data?: any;
+  timeout?: number;
 }
 
 export class HTTPTransport {
@@ -62,7 +62,7 @@ export class HTTPTransport {
       );
 
       Object.keys(headers).forEach(key => {
-              xhr.setRequestHeader(key, headers[key]);
+        xhr.setRequestHeader(key, headers[key]);
       });
     
       xhr.onload = function() {

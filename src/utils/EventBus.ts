@@ -1,6 +1,6 @@
 export default class EventBus {
   listeners: {
-    [key: string]: Function[]
+    [key: string]: Function[];
   };
 
   constructor() {

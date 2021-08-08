@@ -3,9 +3,11 @@ import Block from '../Block';
 import tmpl from './Button.tmpl';
 import { ComponentProps } from '../Types';
 
+const template = Handlebars.compile(tmpl);
+
 interface ButtonProps extends ComponentProps {
-  text: string,
-  type?: string,
+  text: string;
+  type?: string;
 }
 
 export default class Button extends Block {
@@ -14,7 +16,6 @@ export default class Button extends Block {
   }
 
   render() {
-    const template = Handlebars.compile(tmpl);
     return template({
       id: this._id,
       ...this.props

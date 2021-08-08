@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 
 export default class Block {
   static EVENTS: {
-    [key: string]: string
+    [key: string]: string;
   } = {
     INIT: 'init',
     COMPONENT_DID_UPDATE: 'component-did-update',
@@ -11,7 +11,7 @@ export default class Block {
     RENDER: 'render',
   }
 
-  _element: HTMLElement | null = null;
+  _element?: HTMLElement;
   _id: string;
 
   _meta: {
@@ -20,11 +20,10 @@ export default class Block {
   } | null = null;
 
   props: object;
-  eventBus: Function;
+  eventBus: EventBus;
 
   constructor(tagName: string = 'div', props: object = {}) {
-    const eventBus = new EventBus();
-    this.eventBus = () => eventBus;
+    this.eventBus = new EventBus();
     
     this._meta = {
       tagName,
@@ -34,8 +33,8 @@ export default class Block {
     this.props = this._makeProxyProps(props);
     
     this._id = v4();
-    this._registerEvents(eventBus);
-    eventBus.emit(Block.EVENTS.INIT);
+    this._registerEvents(this.eventBus);
+    this.eventBus.emit(Block.EVENTS.INIT);
   }
 
   _registerEvents(eventBus: EventBus) {
@@ -58,8 +57,11 @@ export default class Block {
     return new Proxy(props, {
       set: (target: Record<string, any>, prop: string, value: any) => {
         target[prop] = value;
-        this.eventBus().emit(Block.EVENTS.COMPONENT_DID_UPDATE);
+        this.eventBus.emit(Block.EVENTS.COMPONENT_DID_UPDATE);
         return true;
+      },
+      get: (target: Record<string, any>, prop: string) => {
+        return target[prop];
       },
       deleteProperty: () => {
         throw new Error('Нет доступа');
@@ -88,13 +90,13 @@ export default class Block {
   _componentDidUpdate(oldProps: object, newProps: object) {
     const didUpate = this.componentDidUpdate(oldProps, newProps);
     if (didUpate) {
-      this.eventBus().emit(Block.EVENTS.RENDER);
+      this.eventBus.emit(Block.EVENTS.RENDER);
     }
   }
 
   _componentDidMount() {
     this.componentDidMount();
-    this.eventBus().emit(Block.EVENTS.RENDER);
+    this.eventBus.emit(Block.EVENTS.RENDER);
   }
 
   _createResources() {
@@ -111,7 +113,7 @@ export default class Block {
 
   init() {
     this._createResources();
-    this.eventBus().emit(Block.EVENTS.COMPONENT_DID_MOUNT);
+    this.eventBus.emit(Block.EVENTS.COMPONENT_DID_MOUNT);
   }
 
   getContent() {

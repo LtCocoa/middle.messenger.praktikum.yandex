@@ -1,8 +1,8 @@
 export type Events = {
-  [key: string]: Function
+  [key: string]: Function;
 };
 
 export type ComponentProps = {
-  events?: Events,
-  class?: string,
+  events?: Events;
+  class?: string;
 };
