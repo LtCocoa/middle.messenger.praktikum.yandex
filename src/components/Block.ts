@@ -1,7 +1,7 @@
 import EventBus from '../utils/EventBus';
 import { v4 } from 'uuid';
 
-export default class Block {
+export default class Block<P = any> {
   static EVENTS: {
     [key: string]: string;
   } = {
@@ -11,7 +11,7 @@ export default class Block {
     RENDER: 'render',
   }
 
-  _element?: HTMLElement;
+  _element: HTMLElement | null;
   _id: string;
 
   _meta: {
@@ -19,7 +19,7 @@ export default class Block {
     props: object
   } | null = null;
 
-  props: object;
+  protected readonly props: P;
   eventBus: EventBus;
 
   constructor(tagName: string = 'div', props: object = {}) {
@@ -88,6 +88,7 @@ export default class Block {
   }
 
   _componentDidUpdate(oldProps: object, newProps: object) {
+    console.log('updated');
     const didUpate = this.componentDidUpdate(oldProps, newProps);
     if (didUpate) {
       this.eventBus.emit(Block.EVENTS.RENDER);
@@ -139,5 +140,6 @@ export default class Block {
     }
 
     Object.assign(this.props, nextProps);
+    this.eventBus.emit(Block.EVENTS.COMPONENT_DID_UPDATE);
   };
 }

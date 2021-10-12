@@ -42,16 +42,17 @@ body {
     list-style: none;
     margin: 15px 0;
 
-    .form-header__caption {
+    .form-header__button {
       text-align: center;
       font-size: 28px;
       margin: 15px 0;
       color: $font-text-dark;
+      border: 0;
+      background-color: #00000000;
       cursor: pointer;
-      text-decoration: none;
     }
 
-    .form-header__caption_active {
+    .form-header__button_active {
       color: $font-caption-dark;
       position: relative;
 

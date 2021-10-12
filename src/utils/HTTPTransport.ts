@@ -1,3 +1,5 @@
+import { queryString, PlainObject } from './utils';
+
 enum METHODS {
   GET = 'GET',
   POST = 'POST',
@@ -24,29 +26,45 @@ type RequestOptions = {
 }
 
 export class HTTPTransport {
-  get = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => {       
-    let queryUrl = options.data ? `${url}${queryStringify(options.data)}` : url;
-    return this.request(queryUrl, {...options, method: METHODS.GET}, options.timeout);
+  baseUrl: string = 'https://ya-praktikum.tech';
+  url: string = '';
+
+  constructor(url: string) {
+    this.url = url;
+  }
+
+  get = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => {       
+    let queryUrl = this.concatUrl(url);
+    return this.request(queryUrl, data, {...options, method: METHODS.GET}, 5000);
   };
 
-  post = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
-    return this.request(url, {...options, method: METHODS.POST}, options.timeout);
+  post = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.POST}, 5000);
   };
 
-  put = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
-    return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
+  put = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.PUT}, 5000);
   };
 
-  delete = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => { 
-    return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
+  delete = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => { 
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.DELETE}, 5000);
   };
+
+  concatUrl = (url: string) => {
+    return `${this.baseUrl}/${this.url}/${url}`;
+  }
 
   request = (
     url: string,
+    data: object = {},
     options: RequestOptions = {},
     timeout = 5000
   ): Promise<XMLHttpRequest> => {
-    const { headers = {}, method, data } = options;
+    const { headers = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Credentials': true,
+      accept: 'application/json'
+    }, method } = options;
 
     return new Promise((resolve, reject) => {
       if (!method) {
@@ -61,12 +79,18 @@ export class HTTPTransport {
         url
       );
 
+      xhr.withCredentials = true;
+
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key]);
       });
     
       xhr.onload = function() {
-        resolve(xhr);
+        if (xhr.status !== 200) {
+          reject(JSON.parse(xhr.response));
+        } else {
+          resolve(xhr);
+        }
       };
   
       xhr.onabort = reject;
@@ -78,7 +102,7 @@ export class HTTPTransport {
       if (options.method === METHODS.GET) {
         xhr.send();
       } else {
-        xhr.send(data);
+        xhr.send(JSON.stringify(data));
       }
     });
   };

@@ -1,47 +1,21 @@
-import auth from './pages/auth/auth';
-import registration from './pages/registration/registration';
-import profile from './pages/profile/profile';
-import chat from './pages/chat/chat';
-import error404 from './pages/errors/404';
-import error500 from './pages/errors/500';
+import {
+  Auth,
+  Registration,
+  Chats,
+  UserProfile,
+  Error404,
+  Error500
+} from './pages/index';
+import { Router } from './router/Router';
 
 import './css/index.scss';
 
-const root: HTMLElement | null = document.querySelector('#root');
-
-root?.addEventListener('submit', (event: Event) => {
-  event.preventDefault();
-  const inputs = Array.from(root.querySelectorAll('input'));
-  const formData = inputs.reduce((data: any, input: HTMLInputElement) => {
-    data[input['name']] = input.value;
-    return data;
-  }, {});
-  console.log(formData);
-});
-
-const setPage = (pageTmpl: string): void => {
-  if (root) {
-    root.innerHTML = pageTmpl;
-  }
-};
-
-switch (window.location.pathname) {
-  case '/':
-    setPage(auth);
-    break;
-  case '/registration':
-    setPage(registration);
-    break;
-  case '/profile':
-    setPage(profile);
-    break;
-  case '/chat':
-    setPage(chat);
-    break;
-  case '/500':
-    setPage(error500);
-    break;
-  default:
-    setPage(error404);
-    break;
-}
+const router = new Router('#root');
+router
+  .use('/', Auth)
+  .use('/sign-up', Registration)
+  .use('/messenger', Chats)
+  .use('/settings', UserProfile)
+  .use('/404', Error404)
+  .use('/500', Error500)
+  .start();

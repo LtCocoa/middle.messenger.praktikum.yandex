@@ -1,7 +1,32 @@
 import Handlebars from 'handlebars';
 import template from './chat.tmpl';
+import Block from '../../components/Block';
 import image from '../../../assets/profile_placeholder.png';
 import './chat.scss';
+import { AuthController } from '../../controllers/AuthController';
+
+const tmpl = Handlebars.compile(template);
+const controller = new AuthController();
+
+controller.getUserInfo()
+  .then((userData) => {
+    console.log(userData);
+  });
+
+export class Chats extends Block {
+  constructor() {
+    super('div');
+  }
+
+  render() {
+    return tmpl({
+      id: this._id,
+      contacts,
+      image,
+      user
+    });
+  }
+}
 
 const contacts = [
   {
@@ -20,10 +45,3 @@ const user = {
   name: 'Username',
   status: 'В сети'
 };
-
-const tmpl = Handlebars.compile(template);
-export default tmpl({
-  contacts,
-  image,
-  user
-});
