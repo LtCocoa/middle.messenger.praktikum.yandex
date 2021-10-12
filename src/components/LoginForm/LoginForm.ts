@@ -66,9 +66,3 @@ const loginBtn = new Button({
 });
 
 const loginButton = loginBtn.getHTML();
-
-setTimeout(() => {
-  loginBtn.setProps({
-    text: 'pepega'
-  });
-}, 5000);
