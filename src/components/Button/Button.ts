@@ -1,24 +1,18 @@
-import Handlebars from 'handlebars';
 import Block from '../Block';
-import tmpl from './Button.tmpl';
 import { ComponentProps } from '../Types';
-
-const template = Handlebars.compile(tmpl);
 
 interface ButtonProps extends ComponentProps {
   text: string;
   type?: string;
+  onClick: () => void;
 }
 
-export default class Button extends Block {
-  constructor(props: ButtonProps) {
-    super('div', props);
+export class Button extends Block {
+  constructor({text, onClick}: ButtonProps) {
+    super({text, events: {click: onClick}});
   }
 
   render() {
-    return template({
-      id: this._id,
-      ...this.props
-    });
+    return `<button class="{{ class }}" uuid="{{ id }}" type="{{ type }}">{{ text }}</button>`;
   }
 };

@@ -59,10 +59,8 @@ const passwordInput = new Input({
   }
 }).getHTML();
 
-const loginBtn = new Button({
+const loginButton = new Button({
   text: 'Авторизоваться',
   class: 'form-controls__button primary',
   type: 'submit',
-});
-
-const loginButton = loginBtn.getHTML();
+}).getHTML();

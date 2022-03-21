@@ -1,24 +1,19 @@
-import Handlebars from 'handlebars';
 import Block from '../Block';
-import tmpl from './Input.tmpl';
 import { ComponentProps } from '../Types';
-
-const template = Handlebars.compile(tmpl);
 
 interface InputProps extends ComponentProps {
   name?: string;
   type?: string;
+  onClick: () => void;
+  onInput: () => void;
 };
 
-export default class Input extends Block {
-  constructor(props: InputProps) {
-    super('div', props);
+export class Input extends Block {
+  constructor({name, onClick, onInput}: InputProps) {
+    super({name, events: {click: onClick, input: onInput}});
   }
 
   render() {
-    return template({
-      id: this._id,
-      ...this.props
-    });
+    return `<input type={{ type }} uuid="{{ id }}" />`;
   }
 };

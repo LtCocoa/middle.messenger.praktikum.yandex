@@ -7,15 +7,21 @@ import {
   Error500
 } from './pages/index';
 import { Router } from './router/Router';
+import { Test } from './test';
+import registerComponent from './utils/registerComponent';
+import Block from './components/Block';
 
 import './css/index.scss';
 
+const components = require('./components/**/index.ts') as {
+  [key: string]: { default: typeof Block }
+};
+
+Object.values(components).forEach((component) => {
+  registerComponent(component.default);
+});
+
 const router = new Router('#root');
 router
-  .use('/', Auth)
-  .use('/sign-up', Registration)
-  .use('/messenger', Chats)
-  .use('/settings', UserProfile)
-  .use('/404', Error404)
-  .use('/500', Error500)
+  .use('/', Test)
   .start();

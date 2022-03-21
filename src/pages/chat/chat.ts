@@ -6,12 +6,7 @@ import './chat.scss';
 import { AuthController } from '../../controllers/AuthController';
 
 const tmpl = Handlebars.compile(template);
-const controller = new AuthController();
-
-controller.getUserInfo()
-  .then((userData) => {
-    console.log(userData);
-  });
+// const controller = new AuthController();
 
 export class Chats extends Block {
   constructor() {
