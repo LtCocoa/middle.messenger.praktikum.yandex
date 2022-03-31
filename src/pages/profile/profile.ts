@@ -8,7 +8,7 @@ const tmpl = Handlebars.compile(template);
 
 export class UserProfile extends Block {
   constructor() {
-    super('div');
+    super();
   }
 
   render() {

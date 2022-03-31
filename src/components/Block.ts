@@ -59,7 +59,7 @@ export default class Block<P = any> {
     const fragment = this._compile();
     
     this._removeEvents();
-    const newElement = fragment.firstChild!;
+    const newElement = fragment.firstElementChild!;
 
     this._element!.replaceWith(newElement);
 
@@ -118,9 +118,9 @@ export default class Block<P = any> {
     }
   }
 
-  _componentDidMount() {
-    this.componentDidMount();
-    this.eventBus.emit(Block.EVENTS.RENDER);
+  _componentDidMount(props: P) {
+    this.componentDidMount(props);
+    // this.eventBus.emit(Block.EVENTS.RENDER);
   }
 
   _createResources() {
@@ -130,10 +130,9 @@ export default class Block<P = any> {
   _compile(): DocumentFragment {
     const fragment = document.createElement('template');
 
-    /**
-     * Рендерим шаблон
-     */
-    const template = Handlebars.compile(this.render());
+    const trimmedTemplate = this.render().trim();
+
+    const template = Handlebars.compile(trimmedTemplate);
     fragment.innerHTML = template({
       ...this.state,
       ...this.props,
@@ -173,7 +172,7 @@ export default class Block<P = any> {
 
   init() {
     this._createResources();
-    this.eventBus.emit(Block.EVENTS.COMPONENT_DID_MOUNT);
+    this.eventBus.emit(Block.EVENTS.RENDER);
   }
 
   getContent(): HTMLElement {
@@ -208,7 +207,7 @@ export default class Block<P = any> {
     return true;
   }
 
-  componentDidMount() {}
+  componentDidMount(props: P) {}
 
   setProps = (nextProps: object): void => {
     if (!nextProps) {

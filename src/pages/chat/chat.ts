@@ -10,7 +10,7 @@ const tmpl = Handlebars.compile(template);
 
 export class Chats extends Block {
   constructor() {
-    super('div');
+    super();
   }
 
   render() {

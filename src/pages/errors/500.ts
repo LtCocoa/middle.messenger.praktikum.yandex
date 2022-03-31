@@ -7,7 +7,7 @@ const tmpl = Handlebars.compile(template);
 
 export class Error500 extends Block {
   constructor() {
-    super('div');
+    super();
   }
 
   render() {

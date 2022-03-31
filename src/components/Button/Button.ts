@@ -4,15 +4,16 @@ import { ComponentProps } from '../Types';
 interface ButtonProps extends ComponentProps {
   text: string;
   type?: string;
+  name?: string,
   onClick: () => void;
 }
 
 export class Button extends Block {
-  constructor({text, onClick}: ButtonProps) {
-    super({text, events: {click: onClick}});
+  constructor({text, type, cssClass, name, onClick}: ButtonProps) {
+    super({text, type, cssClass, name, events: {click: onClick}});
   }
 
   render() {
-    return `<button class="{{ class }}" uuid="{{ id }}" type="{{ type }}">{{ text }}</button>`;
+    return `<button uuid="{{ id }}" type="{{ type }}" class="{{ cssClass }}" name="{{ name }}">{{ text }}</button>`;
   }
 };

@@ -53,6 +53,10 @@ export class Router {
     this._onRoute(pathname);
   }
 
+  static go(pathhame: string): void {
+    this.__instance.go(pathhame);
+  }
+
   back(): void {
     this._history.back();
   }

@@ -1,8 +1,6 @@
 import { AuthAPI } from '../api/auth-api';
 import { Router } from '../router/Router';
 
-const authAPI = new AuthAPI();
-
 export type SignInFormData = {
   login: string;
   password: string
@@ -18,9 +16,15 @@ export type SignUpFormData = {
   phone: string
 }
 
-export class AuthController {
+class AuthController {
+  private api: AuthAPI;
+
+  constructor() {
+    this.api = new AuthAPI();
+  }
+
   public signin(data: SignInFormData) {
-    authAPI.signin(data)
+    this.api.signin(data)
       .then(() => {
         Router.__instance.go('/messenger');
       })
@@ -31,7 +35,7 @@ export class AuthController {
 
   public signup(data: SignUpFormData) {
     const { repeat_password, ...params } = data;
-    authAPI.signup(params)
+    this.api.signup(params)
       .then(() => {
         Router.__instance.go('/messenger');
       })
@@ -41,7 +45,7 @@ export class AuthController {
   }
 
   public logout() {
-    authAPI.logout()
+    this.api.logout()
       .then(() => {
         Router.__instance.go('/');
       })
@@ -51,7 +55,7 @@ export class AuthController {
   }
 
   public getUserInfo() {
-    return authAPI.getUserInfo()
+    return this.api.getUserInfo()
       .then(info => {
         return JSON.parse(info.response);
       })
@@ -60,3 +64,5 @@ export class AuthController {
       });
   }
 }
+
+export default new AuthController();

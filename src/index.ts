@@ -1,10 +1,6 @@
 import {
   Auth,
-  Registration,
-  Chats,
-  UserProfile,
-  Error404,
-  Error500
+  Registration
 } from './pages/index';
 import { Router } from './router/Router';
 import { Test } from './test';
@@ -23,5 +19,6 @@ Object.values(components).forEach((component) => {
 
 const router = new Router('#root');
 router
-  .use('/', Test)
+  .use('/', Auth)
+  .use('/sign-up', Registration)
   .start();
