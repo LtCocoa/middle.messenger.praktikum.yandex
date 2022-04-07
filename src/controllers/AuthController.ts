@@ -1,5 +1,7 @@
-import { AuthAPI } from '../api/auth-api';
+import { AuthAPI, UserData } from '../api/AuthAPI';
 import { Router } from '../router/Router';
+import { store } from '../store';
+import { deleteUser, setError, setUser } from '../store/user';
 
 export type SignInFormData = {
   login: string;
@@ -26,18 +28,21 @@ class AuthController {
   public signin(data: SignInFormData) {
     this.api.signin(data)
       .then(() => {
-        Router.__instance.go('/messenger');
+        this.getUserInfo().then(() => Router.go('/messenger'));
       })
       .catch(error => {
-        console.warn(error.reason);
+        store.dispatch(setError(error as { reason: string }));
       });
   }
 
   public signup(data: SignUpFormData) {
-    const { repeat_password, ...params } = data;
-    this.api.signup(params)
-      .then(() => {
-        Router.__instance.go('/messenger');
+    const { repeat_password, password, ...params } = data;
+    if (repeat_password !== password) {
+      return Promise.reject('Пароли не совпадают');
+    }
+    this.api.signup({ ...params, password })
+      .then((userID) => {
+        this.api.getUserInfo().then(() => Router.go('/messenger'));
       })
       .catch(error => {
         console.warn(error.reason);
@@ -47,20 +52,22 @@ class AuthController {
   public logout() {
     this.api.logout()
       .then(() => {
+        store.dispatch(deleteUser());
         Router.__instance.go('/');
       })
       .catch(error => {
-        console.warn(error.reason);
+        store.dispatch(setError(error as { reason: string }));
       });
   }
 
-  public getUserInfo() {
+  public getUserInfo(): Promise<UserData | void> {
     return this.api.getUserInfo()
-      .then(info => {
-        return JSON.parse(info.response);
+      .then(user => {
+        store.dispatch(setUser(user));
+        return user;
       })
       .catch(error => {
-        console.warn(error.reason);
+        store.dispatch(deleteUser());
       });
   }
 }

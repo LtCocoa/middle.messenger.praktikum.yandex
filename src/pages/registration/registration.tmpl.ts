@@ -7,7 +7,7 @@ export default `
             text="Вход"
             type="button"
             cssClass="form-header__button"
-            onClick=onLoginButtonClick
+            onClick=signinButtonClick
           }}}
         </li>
         <li class="form-header__item">
@@ -107,7 +107,7 @@ export default `
           text="Зарегистрироваться"
           type="button"
           cssClass="form-controls__button primary"
-          onClick=loginButtonClick
+          onClick=signupButtonClick
         }}}
       </div>
     </form>

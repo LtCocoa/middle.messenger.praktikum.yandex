@@ -26,27 +26,27 @@ type RequestOptions = {
 }
 
 export class HTTPTransport {
-  baseUrl: string = 'https://ya-praktikum.tech';
+  baseUrl: string = 'https://ya-praktikum.tech/api/v2';
   url: string = '';
 
   constructor(url: string) {
     this.url = url;
   }
 
-  get = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => {       
+  public get<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> {
     let queryUrl = this.concatUrl(url);
-    return this.request(queryUrl, data, {...options, method: METHODS.GET}, 5000);
+    return this.request<Response>(queryUrl, data, {...options, method: METHODS.GET}, 5000);
   };
 
-  post = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
+  public post<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> {
     return this.request(this.concatUrl(url), data, {...options, method: METHODS.POST}, 5000);
   };
 
-  put = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
+  public put<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> {
     return this.request(this.concatUrl(url), data, {...options, method: METHODS.PUT}, 5000);
   };
 
-  delete = (url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<XMLHttpRequest> => { 
+  public delete<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> { 
     return this.request(this.concatUrl(url), data, {...options, method: METHODS.DELETE}, 5000);
   };
 
@@ -54,12 +54,12 @@ export class HTTPTransport {
     return `${this.baseUrl}/${this.url}/${url}`;
   }
 
-  request = (
+  private request<Response> (
     url: string,
     data: object = {},
     options: RequestOptions = {},
     timeout = 5000
-  ): Promise<XMLHttpRequest> => {
+  ): Promise<Response> {
     const { headers = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Credentials': true,
@@ -75,21 +75,22 @@ export class HTTPTransport {
       const xhr = new XMLHttpRequest();
 
       xhr.open(
-        method, 
+        method,
         url
       );
 
       xhr.withCredentials = true;
 
-      Object.keys(headers).forEach(key => {
-        xhr.setRequestHeader(key, headers[key]);
-      });
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
     
-      xhr.onload = function() {
-        if (xhr.status !== 200) {
-          reject(JSON.parse(xhr.response));
-        } else {
-          resolve(xhr);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status < 400) {
+            resolve(xhr.response);
+          } else {
+            reject(xhr.response);
+          }
         }
       };
   

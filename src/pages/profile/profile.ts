@@ -1,29 +1,22 @@
-import Handlebars from 'handlebars';
 import template from './profile.tmpl';
 import Block from '../../components/Block';
-import SettingsForm from '../../components/SettingsForm/SettingsForm';
 import './profile.scss';
-
-const tmpl = Handlebars.compile(template);
+import { connect } from '../../store/index';
+import { withRouter } from '../../router/Router';
+import AuthController from '../../controllers/AuthController';
 
 export class UserProfile extends Block {
-  constructor() {
-    super();
+  getStateFromProps() {
+    this.state = {
+      logoutButtonClick: () => {
+        AuthController.logout();
+      }
+    };
   }
 
   render() {
-    return tmpl({
-      id: this._id,
-      settingsForm
-    });
+    return template;
   }
 }
 
-const settingsForm = new SettingsForm({
-  events: {
-    submit: event => {
-      event.preventDefault();
-      console.log(event);
-    }
-  }
-}).getHTML();
+export default withRouter(connect((state: any) => ({ user: state.user.profile }), UserProfile));

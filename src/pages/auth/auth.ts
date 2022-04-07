@@ -2,11 +2,20 @@ import template from './auth.tmpl';
 import Block from '../../components/Block';
 import AuthController from '../../controllers/AuthController';
 import { Router } from '../../router/Router';
+import {
+  validateLogin,
+  validatePassword,
+  checkValidation
+} from '../../utils/Validators';
+import { connect } from '../../store/index';
+import { withRouter } from '../../router/Router';
+import { store } from '../../store';
 
-export class Auth extends Block {
-  protected getStateFromProps() {
+
+class Auth extends Block {
+  getStateFromProps() {
     this.state = {
-      loginButtonClick: () => {
+      signinButtonClick: () => {
         const data = {};
 
         Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
@@ -18,15 +27,30 @@ export class Auth extends Block {
           password: data.password
         });
       },
-      onRegistrationButtonClick: () => {
+
+      signupButtonClick: () => {
         Router.go('/sign-up');
       },
-      blurTest: () => {
-        
+
+      loginValidation: (event: Event) => {
+        checkValidation('#login_tooltip', validateLogin, 'active')(event);
+      },
+
+      passwordValidation: (event: Event) => {
+        checkValidation('#password_tooltip', validatePassword, 'active')(event);
       },
     };
   }
+
+  componentDidMount() {
+    if (this.props.user.profile) {
+      Router.go('/messenger');
+    }
+  }
+
   render() {
     return template;
   }
 }
+
+export default withRouter(connect((state: any) => ({user: state.user || {}}), Auth));

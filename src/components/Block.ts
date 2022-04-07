@@ -38,6 +38,7 @@ export default class Block<P = any> {
     this.getStateFromProps(props);
 
     this.props = this._makeProxyProps(props || {} as P);
+    this.state = this._makeProxyProps(this.state);
     
     this._id = v4();
     this._registerEvents(this.eventBus);
@@ -120,7 +121,6 @@ export default class Block<P = any> {
 
   _componentDidMount(props: P) {
     this.componentDidMount(props);
-    // this.eventBus.emit(Block.EVENTS.RENDER);
   }
 
   _createResources() {
@@ -215,15 +215,6 @@ export default class Block<P = any> {
     }
 
     Object.assign(this.props, nextProps);
-  };
-
-  show() {
-    this.getContent().style.display = 'block';
-  }
-
-  hide() {
-    this.getContent().style.display = 'none';
-  }
-  
+  };  
 }
 

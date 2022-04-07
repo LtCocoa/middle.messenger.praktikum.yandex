@@ -14,7 +14,7 @@ export default `
             text="Регистрация"
             type="button"
             cssClass="form-header__button"
-            onClick=onRegistrationButtonClick
+            onClick=signupButtonClick
           }}}
         </li>
       </ul>
@@ -24,7 +24,7 @@ export default `
           type="text"
           ref="login"
           cssClass="form-field__input"
-          onBlur=blurTest
+          onBlur=loginValidation
         }}}
         <label id="login_tooltip" class="form-field__input-tooltip">
           Логин должен содержать только буквы и цифры и должен быть длиной от 3 до 15 символов
@@ -36,6 +36,7 @@ export default `
           type="password"
           ref="password"
           cssClass="form-field__input"
+          onBlur=passwordValidation
         }}}
         <label id="password_tooltip" class="form-field__input-tooltip">
           Пароль должен содержать только буквы и цифры и должен быть длиной от 6 до 15 символов
@@ -46,7 +47,7 @@ export default `
           text="Авторизоваться"
           type="button"
           cssClass="form-controls__button primary"
-          onClick=loginButtonClick
+          onClick=signinButtonClick
         }}}
       </div>
     </form>

@@ -5,17 +5,17 @@ export default `
         <input class="search-panel__input" type="text" placeholder="Поиск" />
       </div>
       <ul class="chat-list">
-        {{#each contacts}}
+        {{#each chats}}
           <li class="chat-list__item">
             <div class="image-wrapper">
-              <img src="{{imgSrc}}" width="50" class="image-wrapper__image image-round" />
+              <img src=avatar width="50" class="image-wrapper__image image-round" />
             </div>
             <div>
               <div>
-                <p class="chat-list__item-name">{{this.name}}</p>
+                <p class="chat-list__item-name">{{ title }}</p>
               </div>
               <div>
-                <p class="chat-list__item-message">{{this.message}}</p>
+                <p class="chat-list__item-message">{{ lastMessage }}</p>
               </div>
             </div>
           </li>
@@ -27,7 +27,7 @@ export default `
         </div>
         <div class="user-info">
           <div>
-            <p class="user-info__name">{{user.name}}</p>
+            <p class="user-info__name">{{user.profile.first_name}}</p>
           </div>
           <div>
             <p class="user-info__status">{{user.status}}</p>
