@@ -9,8 +9,11 @@ class Messenger extends Block {
   protected getStateFromProps() {
     this.state = {
       chats: [],
-      openChat: () => {
-        console.log('!');
+      sendMessage: () => {
+        const message = this.refs.messageText.value.trim();
+        if (message) {
+          ChatsController.sendMessage(message);
+        }
       }
     };
   }
@@ -19,9 +22,19 @@ class Messenger extends Block {
     return template;
   }
 
+  componentDidUpdate() {
+    if (this.props.chat) {
+      
+    }
+
+    return true;
+  }
+
   async componentDidMount() {
     this.state.chats = await ChatsController.fetchChats();
   }
 }
 
-export default withRouter(connect((state: any) => ({user: state.user || {}}), Messenger));
+const page = connect((state: any) => ({user: state.user || {}, chat: state.chat || {}}), Messenger);
+
+export default withRouter(page);

@@ -1,17 +1,19 @@
 import Block from '../Block';
 import { ComponentProps } from '../Types';
+import { ChatsData } from '../../api/ChatsAPI';
+import ChatsController from '../../controllers/ChatsController';
 
 interface ChatProps extends ComponentProps {
-  id: number;
-  chatName: string;
-  lastMessage: string;
-  avatar: string;
-  onClick: () => void;
+  chat: ChatsData
 }
 
 export class Chat extends Block {
-  constructor({ id, chatName, lastMessage, avatar, onClick }: ChatProps) {
-    super({ id, chatName, lastMessage, avatar, events: { click: onClick }});
+  constructor({ chat }: ChatProps) {
+    const selectChat = () => {
+      ChatsController.selectChat(this.props.chat);
+    };
+
+    super({ chat, events: { click: selectChat } });
   }
 
   componentDidMount() {
@@ -19,13 +21,13 @@ export class Chat extends Block {
   }
 
   render() {
-    return `<li class="chat-list__item" uuid="{{ id }}">
+    return `<li class="chat-list__item">
       <div class="image-wrapper">
-        <img src="{{ avatar }}" width="50" class="image-wrapper__image image-round" />
+        <img src="{{ chat.avatar }}" width="50" class="image-wrapper__image image-round" />
       </div>
       <div>
         <div>
-          <p class="chat-list__item-name">{{ chatName }}</p>
+          <p class="chat-list__item-name">{{ chat.title }}</p>
         </div>
         <div>
           <p class="chat-list__item-message">{{ lastMessage }}</p>

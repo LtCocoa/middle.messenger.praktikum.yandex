@@ -6,19 +6,9 @@ export default `
       </div>
       <ul class="chat-list">
         {{#each chats}}
-          <li class="chat-list__item">
-            <div class="image-wrapper">
-              <img src=avatar width="50" class="image-wrapper__image image-round" />
-            </div>
-            <div>
-              <div>
-                <p class="chat-list__item-name">{{ title }}</p>
-              </div>
-              <div>
-                <p class="chat-list__item-message">{{ lastMessage }}</p>
-              </div>
-            </div>
-          </li>
+          {{{ Chat
+            chat=this
+          }}}
         {{/each}}
       </ul>
       <div class="chat-footer">
@@ -36,9 +26,21 @@ export default `
       </div>
     </div>
     <div class="chat-messages">
+      {{#if chat.chatData}}
+      <div>
+        <ul>
+          {{#each chat.messages}}
+            <li>{{content}}</li>
+          {{/each}}
+        </ul>
+        {{{ Input type="text" ref="messageText" }}}
+        {{{ Button text="Send" onClick=sendMessage }}}
+      </div>
+      {{else}}
       <div class="chat-messages__select-chat">
         Выберите чат чтобы отправить сообщение
       </div>
+      {{/if}}
     </div>
   </main>
 `;

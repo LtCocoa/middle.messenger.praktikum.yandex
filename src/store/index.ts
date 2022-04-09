@@ -1,9 +1,11 @@
 import user from './user';
+import chat from './chat';
 import {Store} from '../utils/store';
 import Block from '../components/Block';
 
 export const store = new Store({
   user,
+  chat
 });
 
 export function connect(stateToProps: (state: any) => any, Component: typeof Block) {
