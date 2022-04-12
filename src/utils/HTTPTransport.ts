@@ -50,6 +50,14 @@ export class HTTPTransport {
     return this.request(this.concatUrl(url), data, {...options, method: METHODS.DELETE}, 5000);
   };
 
+  public putFile<Response>(url: string, data: FormData, options: RequestOptions = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    }
+  }): Promise<Response> {
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.PUT}, 5000);
+  };
+
   concatUrl = (url: string) => {
     return `${this.baseUrl}/${this.url}/${url}`;
   }
@@ -61,9 +69,9 @@ export class HTTPTransport {
     timeout = 5000
   ): Promise<Response> {
     const { headers = {
-      'Content-Type': 'application/json',
+      'content-type': 'application/json',
       'Access-Control-Allow-Credentials': true,
-      accept: 'application/json'
+      'accept': 'application/json'
     }, method } = options;
 
     return new Promise((resolve, reject) => {
@@ -81,7 +89,7 @@ export class HTTPTransport {
 
       xhr.withCredentials = true;
 
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      
       xhr.responseType = 'json';
     
       xhr.onreadystatechange = () => {
@@ -102,7 +110,10 @@ export class HTTPTransport {
           
       if (options.method === METHODS.GET) {
         xhr.send();
-      } else {
+      } else if (headers['content-type'] === 'multipart/form-data') {
+        xhr.send(data);
+      }
+      else {
         xhr.send(JSON.stringify(data));
       }
     });

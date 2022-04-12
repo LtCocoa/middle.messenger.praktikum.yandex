@@ -1,7 +1,7 @@
 import { HTTPTransport } from '../utils/HTTPTransport';
 
 export default class BaseAPI {
-  protected http: HTTPTransport;
+  public http: HTTPTransport;
 
   protected constructor(endpoint: string) {
     this.http = new HTTPTransport(endpoint);

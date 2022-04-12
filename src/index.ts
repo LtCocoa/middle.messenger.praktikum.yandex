@@ -19,11 +19,10 @@ Object.values(components).forEach((component) => {
   registerComponent(component.default);
 });
 
+const router = new Router();
 
 AuthController.getUserInfo()
   .then(() => {
-    const router = new Router();
-    
     router
       .use('/', Auth)
       .use('/sign-up', Registration)

@@ -13,21 +13,19 @@ class Messenger extends Block {
         const message = this.refs.messageText.value.trim();
         if (message) {
           ChatsController.sendMessage(message);
+          this.refs.messageText.value = '';
         }
+      },
+      isOwnMessage: (data: any) => {
+        console.log(data);
+        const id = data.user_id ? data.user_id : data.userId;
+        return id === this.props.user.profile.id ? 'own' : '';
       }
     };
   }
 
   render() {
     return template;
-  }
-
-  componentDidUpdate() {
-    if (this.props.chat) {
-      
-    }
-
-    return true;
   }
 
   async componentDidMount() {

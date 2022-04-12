@@ -72,6 +72,10 @@
         &:hover {
           background-color: $base-color;
         }
+
+        &.active {
+          background-color: $base-color;
+        }
       }
     }
 
@@ -90,6 +94,7 @@
 
         .user-info__name {
           color: $font-caption-light;
+          text-decoration: none;
         }
 
         .user-info__status {
@@ -99,10 +104,61 @@
     }
   }
 
-  .chat-messages {
+  .chat-main {
     width: 100%;
-    
-    .chat-messages__select-chat {
+
+    .messenger-area {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .messenger-area__header {
+      height: 55px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.295);
+      z-index: 3;
+    }
+
+    .messenger-area__footer {
+      height: 75px;
+      display: flex;
+      align-items: center;
+    }
+
+    .message-list-wrapper {
+      flex: 1;
+      overflow-y: scroll;
+      padding-top: 10px;
+      z-index: 2;
+
+      .message-list {
+        list-style: none;
+        flex-direction: column;
+        width: 65%;
+        margin: 0 auto;
+        
+        .message-list__item {
+          --max-width: 30rem;
+          display: flex;
+          margin-bottom: 10px;
+
+          &.own {
+            flex-direction: row-reverse;
+          }
+
+          .message-text {
+            padding: 7px;
+            border-radius: 8px;
+            background-color: $background-gray;
+          }
+        }
+      }
+    }
+
+    .chat-main__select-chat {
       height: 100%;
       width: 100%;
       display: flex;
@@ -112,7 +168,6 @@
     }
   }
 }
-
 
 .image-round {
   border-radius: 50%;

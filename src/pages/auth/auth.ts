@@ -9,7 +9,6 @@ import {
 } from '../../utils/Validators';
 import { connect } from '../../store/index';
 import { withRouter } from '../../router/Router';
-import { store } from '../../store';
 
 
 class Auth extends Block {

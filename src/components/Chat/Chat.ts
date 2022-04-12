@@ -16,10 +16,6 @@ export class Chat extends Block {
     super({ chat, events: { click: selectChat } });
   }
 
-  componentDidMount() {
-    
-  }
-
   render() {
     return `<li class="chat-list__item">
       <div class="image-wrapper">

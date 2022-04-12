@@ -53,7 +53,7 @@ class AuthController {
     this.api.logout()
       .then(() => {
         store.dispatch(deleteUser());
-        Router.__instance.go('/');
+        Router.go('/');
       })
       .catch(error => {
         store.dispatch(setError(error as { reason: string }));
@@ -63,10 +63,12 @@ class AuthController {
   public getUserInfo(): Promise<UserData | void> {
     return this.api.getUserInfo()
       .then(user => {
+        user.avatar = `${this.api.http.baseUrl}/resources/${user.avatar}`;
         store.dispatch(setUser(user));
         return user;
       })
       .catch(error => {
+        Router.go('/');
         store.dispatch(deleteUser());
       });
   }
