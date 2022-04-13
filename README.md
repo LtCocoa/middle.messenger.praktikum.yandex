@@ -3,7 +3,7 @@
 ## Чат-приложение
 В качестве шаблонизатора используется Handlebars
 
-- ### [pull request](https://github.com/LtCocoa/middle.messenger.praktikum.yandex/pull/2)
+- ### [pull request](https://github.com/LtCocoa/middle.messenger.praktikum.yandex/pull/3)
 - ### [макет приложения в Figma](https://www.figma.com/file/NdHWI3MhrmSBIHKOaqHL59/chat-app?node-id=0%3A1)
 - ### [деплой на Netlify](https://nifty-mccarthy-040682.netlify.app/)
 
