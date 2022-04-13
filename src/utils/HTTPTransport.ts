@@ -1,3 +1,5 @@
+import { queryString, PlainObject } from './utils';
+
 enum METHODS {
   GET = 'GET',
   POST = 'POST',
@@ -24,29 +26,53 @@ type RequestOptions = {
 }
 
 export class HTTPTransport {
-  get = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => {       
-    let queryUrl = options.data ? `${url}${queryStringify(options.data)}` : url;
-    return this.request(queryUrl, {...options, method: METHODS.GET}, options.timeout);
+  baseUrl: string = 'https://ya-praktikum.tech/api/v2';
+  url: string = '';
+
+  constructor(url: string) {
+    this.url = url;
+  }
+
+  public get<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> {
+    let queryUrl = this.concatUrl(url);
+    return this.request<Response>(queryUrl, data, {...options, method: METHODS.GET}, 5000);
   };
 
-  post = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
-    return this.request(url, {...options, method: METHODS.POST}, options.timeout);
+  public post<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> {
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.POST}, 5000);
   };
 
-  put = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => {
-    return this.request(url, {...options, method: METHODS.PUT}, options.timeout);
+  public put<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> {
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.PUT}, 5000);
   };
 
-  delete = (url: string, options: RequestOptions = {}): Promise<XMLHttpRequest> => { 
-    return this.request(url, {...options, method: METHODS.DELETE}, options.timeout);
+  public delete<Response>(url: string, data: PlainObject = {}, options: RequestOptions = {}): Promise<Response> { 
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.DELETE}, 5000);
   };
 
-  request = (
+  public putFile<Response>(url: string, data: FormData, options: RequestOptions = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    }
+  }): Promise<Response> {
+    return this.request(this.concatUrl(url), data, {...options, method: METHODS.PUT}, 5000);
+  };
+
+  concatUrl = (url: string) => {
+    return `${this.baseUrl}/${this.url}/${url}`;
+  }
+
+  private request<Response> (
     url: string,
+    data: object = {},
     options: RequestOptions = {},
     timeout = 5000
-  ): Promise<XMLHttpRequest> => {
-    const { headers = {}, method, data } = options;
+  ): Promise<Response> {
+    const { headers = {
+      'content-type': 'application/json',
+      'Access-Control-Allow-Credentials': true,
+      'accept': 'application/json'
+    }, method } = options;
 
     return new Promise((resolve, reject) => {
       if (!method) {
@@ -57,16 +83,27 @@ export class HTTPTransport {
       const xhr = new XMLHttpRequest();
 
       xhr.open(
-        method, 
+        method,
         url
       );
 
-      Object.keys(headers).forEach(key => {
-        xhr.setRequestHeader(key, headers[key]);
-      });
+      xhr.withCredentials = true;
+
+      if (headers['content-type'] !== 'multipart/form-data') {
+        xhr.setRequestHeader('content-type', headers['content-type']);
+      }
+      xhr.setRequestHeader('accept', headers['accept']);
+      
+      xhr.responseType = 'json';
     
-      xhr.onload = function() {
-        resolve(xhr);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status < 400) {
+            resolve(xhr.response);
+          } else {
+            reject(xhr.response);
+          }
+        }
       };
   
       xhr.onabort = reject;
@@ -74,11 +111,14 @@ export class HTTPTransport {
   
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
-          
+
       if (options.method === METHODS.GET) {
         xhr.send();
-      } else {
+      } else if (headers['content-type'] === 'multipart/form-data') {
         xhr.send(data);
+      }
+      else {
+        xhr.send(JSON.stringify(data));
       }
     });
   };

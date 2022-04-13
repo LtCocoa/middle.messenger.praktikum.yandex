@@ -42,16 +42,17 @@ body {
     list-style: none;
     margin: 15px 0;
 
-    .form-header__caption {
+    .form-header__button {
       text-align: center;
       font-size: 28px;
       margin: 15px 0;
       color: $font-text-dark;
+      border: 0;
+      background-color: #00000000;
       cursor: pointer;
-      text-decoration: none;
     }
 
-    .form-header__caption_active {
+    .form-header__button_active {
       color: $font-caption-dark;
       position: relative;
 
@@ -72,60 +73,68 @@ body {
     display: flex;
     flex-direction: column;
     margin: 50px 0 20px;
+  }
+}
 
-    .form-controls__button {
-      cursor: pointer;
-      color: $base-color;
-      border-radius: 7px;
-      margin: 5px 0;
-      padding: 5px;
-      border: 0;
-      background-color: unset;
+.form-controls__button {
+  cursor: pointer;
+  color: $base-color;
+  border-radius: 7px;
+  margin: 5px 0;
+  padding: 5px;
+  border: 0;
+  background-color: unset;
 
-      &:focus {
-        box-shadow: 0 0 3px rgb(58, 58, 58);
-      }
+  &:focus {
+    box-shadow: 0 0 3px rgb(58, 58, 58);
+  }
 
-      &.primary {
-        background-color: $base-color;
-        color: aliceblue;
-      }
+  &.primary {
+    background-color: $base-color;
+    color: aliceblue;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  .form-field__input {
+    padding: 5px 10px;
+    color: $font-caption-dark;
+    border-radius: 5px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    background-color: $background-gray;
+    transition: border-color .1s ease-out;
+
+    &:focus {
+      border-color: $base-color;
     }
   }
 
-  .form-field {
-    display: flex;
-    flex-direction: column;
+  .form-field__input-tooltip {
+    display: none;
+    color: rgb(255, 67, 67);
+    font-weight: 400;
+    padding: 0 5px;
+    font-size: 13px;
 
-    .form-field__input {
-      padding: 5px 10px;
-      color: $font-caption-dark;
-      border-radius: 5px;
-      border: 3px solid rgba(0, 0, 0, 0.1);
-      background-color: $background-gray;
-      transition: border-color .1s ease-out;
-
-      &:focus {
-        border-color: $base-color;
-      }
-    }
-
-    .form-field__input-tooltip {
-      display: none;
-      color: rgb(255, 67, 67);
-      font-weight: 400;
-      padding: 0 5px;
-      font-size: 13px;
-
-      &.active {
-        display: block;
-      }
-    }
-    
-    .form-field__label {
-      color: $font-text-dark;
-      font-size: 14px;
-      padding: 5px;
+    &.active {
+      display: block;
     }
   }
+  
+  .form-field__label {
+    color: $font-text-dark;
+    font-size: 14px;
+    padding: 5px;
+  }
+}
+
+.modal {
+  border: 0;
+  border-radius: 10px;
+  width: 30%;
+  margin: auto;
+  padding: 1em;
 }

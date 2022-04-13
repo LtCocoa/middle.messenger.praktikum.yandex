@@ -1,7 +1,7 @@
-import Handlebars from 'handlebars';
 import template from './registration.tmpl';
-import Button from '../../components/Button/Button';
-import Input from '../../components/Input/Input';
+import Block from '../../components/Block';
+import { Router } from '../../router/Router';
+import AuthController, { SignUpFormData } from '../../controllers/AuthController';
 import {
   validateEmail,
   validateLogin,
@@ -10,88 +10,67 @@ import {
   validatePhoneNumber,
   checkValidation
 } from '../../utils/Validators';
+import { connect } from '../../store/index';
+import { withRouter } from '../../router/Router';
 
-const emailInput = new Input({
-  class: 'form-field__input',
-  name: 'email',
-  type: 'email',
-  events: {
-    blur: checkValidation('#email_tooltip', validateEmail, 'active'),
-    focus: checkValidation('#email_tooltip', validateEmail, 'active'),
+export class Registration extends Block {
+  protected getStateFromProps() {
+    this.state = {
+      signinButtonClick: () => {
+        Router.go('/');
+      },
+
+      signupButtonClick: () => {
+        const data: SignUpFormData = {
+          first_name: '',
+          second_name: '',
+          login: '',
+          email: '',
+          password: '',
+          repeat_password: '',
+          phone: '',
+        };
+
+        Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
+          data[key] = input.value;
+        });
+  
+        AuthController.signup(data);
+      },
+
+      emailValidation: (event: Event) => {
+        checkValidation('#email_tooltip', validateEmail, 'active')(event);
+      },
+
+      loginValidation: (event: Event) => {
+        checkValidation('#login_tooltip', validateLogin, 'active')(event);
+      },
+
+      firstNameValidation: (event: Event) => {
+        checkValidation('#first_name_tooltip', validateName, 'active')(event);
+      },
+
+      secondNameValidation: (event: Event) => {
+        checkValidation('#second_name_tooltip', validateName, 'active')(event);
+      },
+
+      phoneValidation: (event: Event) => {
+        checkValidation('#phone_tooltip', validatePhoneNumber, 'active')(event);
+      },
+
+      passwordValidation: (event: Event) => {
+        checkValidation('#password_tooltip', validatePassword, 'active')(event);
+      },
+
+      repeatPasswordValidation: (event: Event) => {
+        checkValidation('#repeat_password_tooltip', validatePassword, 'active')(event);
+      },
+    };
   }
-}).getHTML();
 
-const loginInput = new Input({
-  class: 'form-field__input',
-  name: 'login',
-  events: {
-    blur: checkValidation('#login_tooltip', validateLogin, 'active'),
-    focus: checkValidation('#login_tooltip', validateLogin, 'active'),
+  render() {
+    return template;
   }
-}).getHTML();
+}
 
-const firstNameInput = new Input({
-  class: 'form-field__input',
-  name: 'first_name',
-  events: {
-    blur: checkValidation('#first_name_tooltip', validateName, 'active'),
-    focus: checkValidation('#first_name_tooltip', validateName, 'active'),
-  }
-}).getHTML();
-
-const secondNameInput = new Input({
-  class: 'form-field__input',
-  name: 'second_name',
-  events: {
-    blur: checkValidation('#second_name_tooltip', validateName, 'active'),
-    focus: checkValidation('#second_name_tooltip', validateName, 'active'),
-  }
-}).getHTML();
-
-const phoneInput = new Input({
-  class: 'form-field__input',
-  name: 'phone',
-  type: 'tel',
-  events: {
-    blur: checkValidation('#phone_tooltip', validatePhoneNumber, 'active'),
-    focus: checkValidation('#phone_tooltip', validatePhoneNumber, 'active'),
-  }
-}).getHTML();
-
-const passwordInput = new Input({
-  class: 'form-field__input',
-  name: 'password',
-  type: 'password',
-  events: {
-    blur: checkValidation('#password_tooltip', validatePassword, 'active'),
-    focus: checkValidation('#password_tooltip', validatePassword, 'active'),
-  }
-}).getHTML();
-
-const repeatPasswordInput = new Input({
-  class: 'form-field__input',
-  name: 'repeat_password',
-  type: 'password',
-  events: {
-    blur: checkValidation('#repeat_password_tooltip', validatePassword, 'active'),
-    focus: checkValidation('#repeat_password_tooltip', validatePassword, 'active'),
-  }
-}).getHTML();
-
-const registerButton = new Button({
-  text: 'Зарегистрироваться',
-  class: 'form-controls__button primary',
-  type: 'submit',
-}).getHTML();
-
-const tmpl = Handlebars.compile(template);
-export default tmpl({
-  emailInput,
-  loginInput,
-  firstNameInput,
-  secondNameInput,
-  phoneInput,
-  passwordInput,
-  repeatPasswordInput,
-  registerButton,
-});
+export default withRouter(connect((state: any) => ({user: state.user || {}}), Registration));
