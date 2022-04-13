@@ -13,7 +13,7 @@ export class UserProfile extends Block {
       logoutButtonClick: () => {
         AuthController.logout();
       },
-      saveUserData: () => {
+      saveUserAvatar: () => {
         const avatar = document.getElementById('avatar');
         const form = new FormData();
         form.append('avatar', avatar.files[0]);
@@ -22,17 +22,47 @@ export class UserProfile extends Block {
         });
       },
       image: () => {
-        return this.props.user.avatar ? this.props.user.avatar : avatarPlaceholder;
+        return this.props.user?.avatar ? this.props.user?.avatar : avatarPlaceholder;
+      },
+      saveUserData: () => {
+        const data = {};
+
+        Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
+          data[key] = input.value;
+        });
+
+        UserController.changeUserData(data);
+      },
+      showModal: () => {
+        const modal: HTMLDialogElement | null = document.querySelector('#modal');
+        modal?.showModal();
+      },
+      changePassword: () => {
+        const oldPassword = this.refs.oldPassword.value;
+        const newPassword = this.refs.newPassword.value;
+        const repeatNewPassword = this.refs.repeatNewPassword.value;
+
+        if (newPassword !== repeatNewPassword) {
+          return;
+        }
+
+        const data = {
+          oldPassword: oldPassword,
+          newPassword: newPassword
+        };
+        UserController.changeUserPassword(data).then(() => {
+          AuthController.getUserInfo();
+        });
+      },
+      cancelChangePassword: () => {
+        const modal: HTMLDialogElement | null = document.querySelector('#modal');
+        modal?.close();
       }
     };
   }
 
   render() {
     return template;
-  }
-
-  componentDidMount() {
-    console.log(this);
   }
 }
 

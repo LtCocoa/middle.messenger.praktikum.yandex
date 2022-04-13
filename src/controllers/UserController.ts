@@ -14,6 +14,14 @@ class UserController {
   uploadAvatar(formData: FormData): Promise<unknown> {
     return this.api.uploadAvatar(formData);
   }
+
+  changeUserData(data) {
+    return this.api.changeUserData(data);
+  }
+
+  changeUserPassword(data) {
+    return this.api.changeUserPassword(data);
+  }
 }
 
 export default new UserController();

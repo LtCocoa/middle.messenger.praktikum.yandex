@@ -89,6 +89,10 @@ export class HTTPTransport {
 
       xhr.withCredentials = true;
 
+      if (headers['content-type'] !== 'multipart/form-data') {
+        xhr.setRequestHeader('content-type', headers['content-type']);
+      }
+      xhr.setRequestHeader('accept', headers['accept']);
       
       xhr.responseType = 'json';
     
@@ -107,7 +111,7 @@ export class HTTPTransport {
   
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
-          
+
       if (options.method === METHODS.GET) {
         xhr.send();
       } else if (headers['content-type'] === 'multipart/form-data') {

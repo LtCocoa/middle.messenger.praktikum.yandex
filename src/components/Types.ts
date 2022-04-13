@@ -5,4 +5,5 @@ export type Events = {
 export type ComponentProps = {
   events?: Events;
   cssClass?: string;
+  elementId?: string;
 };

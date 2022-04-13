@@ -1,7 +1,6 @@
-import { ChatsAPI, ChatsData } from '../api/ChatsAPI';
-import { Router } from '../router/Router';
+import { ChatsAPI } from '../api/ChatsAPI';
 import { store } from '../store';
-import { addMessage, setChat, setMessages } from '../store/chat';
+import { addMessage, setChat, setMessages, setChatUsers } from '../store/chat';
 
 class ChatsController {
   private api: ChatsAPI;
@@ -19,15 +18,19 @@ class ChatsController {
     return this.api.createChat(chatTitle);
   }
 
-  public async selectChat(chat: any): Promise<void> {
+  public selectChat(chat: any) {
     store.dispatch(setChat(chat));
-    await this.fetchChatToken();
-    this.openWebSocket();
+    return this.fetchChatToken().then(() => {
+      this.openWebSocket();
+      this.fetchChatUsers(chat.id);
+    });
   }
 
-  protected async fetchChatToken() {
-    const { token } = await this.api.fetchChatToken(store.getState().chat.chatData.id);
-    this.chatToken = token;
+  protected fetchChatToken(): Promise<unknown> {
+    return this.api.fetchChatToken(store.getState().chat.chatData.id).then(({ token }) => {
+      this.chatToken = token;
+      return Promise.resolve();
+    });
   }
 
   protected openWebSocket() {
@@ -45,8 +48,21 @@ class ChatsController {
     }
   }
 
+  public fetchChatUsers(chatId: number) {
+    return this.api.fetchChatUsers(chatId).then(users => {
+      store.dispatch(setChatUsers(users));
+    });
+  }
+
   public sendMessage(message: string) {
     this.api.sendMessage(message);
+  }
+
+  public addUserToChat(userId: number, chatId: number) {
+    const users = [userId];
+    return this.api.addUserToChat(users, chatId).then(() => {
+      this.fetchChatUsers(chatId);
+    });
   }
 }
 

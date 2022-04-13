@@ -32,7 +32,6 @@ export class ChatsAPI extends BaseAPI {
   }
 
   openWebSocket(chatID: number, userID: number, token: string, getMessage: (event: any) => void) {
-    // return;
     this.socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${chatID}/${userID}/${token}`);
 
     this.socket.addEventListener('open', () => {
@@ -59,8 +58,12 @@ export class ChatsAPI extends BaseAPI {
     });
   }
 
-  async fetchChatToken(chatID: number): Promise<any> {
+  fetchChatToken(chatID: number): Promise<any> {
     return this.http.post(`token/${chatID}`);
+  }
+
+  fetchChatUsers(chatId: number) {
+    return this.http.get(`${chatId}/users`);
   }
 
   sendMessage(message: string) {
@@ -68,5 +71,12 @@ export class ChatsAPI extends BaseAPI {
       type: 'message',
       content: message
     }));
+  }
+
+  addUserToChat(users: Array<number>, chatId: number) {
+    return this.http.put('users', {
+      users,
+      chatId
+    });
   }
 }
