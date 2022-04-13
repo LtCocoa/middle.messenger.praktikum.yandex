@@ -1,41 +1,55 @@
-import Handlebars from 'handlebars';
 import template from './auth.tmpl';
-import Button from '../../components/Button/Button';
-import Input from '../../components/Input/Input';
+import Block from '../../components/Block';
+import AuthController from '../../controllers/AuthController';
+import { Router } from '../../router/Router';
 import {
   validateLogin,
   validatePassword,
   checkValidation
 } from '../../utils/Validators';
+import { connect } from '../../store/index';
+import { withRouter } from '../../router/Router';
 
-const loginInput = new Input({
-  class: 'form-field__input',
-  name: 'login',
-  events: {
-    blur: checkValidation('#login_tooltip', validateLogin, 'active'),
-    focus: checkValidation('#login_tooltip', validateLogin, 'active'),
+
+class Auth extends Block {
+  getStateFromProps() {
+    this.state = {
+      signinButtonClick: () => {
+        const data = {};
+
+        Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
+          data[key] = input.value;
+        });
+
+        AuthController.signin({
+          login: data.login,
+          password: data.password
+        });
+      },
+
+      signupButtonClick: () => {
+        Router.go('/sign-up');
+      },
+
+      loginValidation: (event: Event) => {
+        checkValidation('#login_tooltip', validateLogin, 'active')(event);
+      },
+
+      passwordValidation: (event: Event) => {
+        checkValidation('#password_tooltip', validatePassword, 'active')(event);
+      },
+    };
   }
-}).getHTML();
 
-const passwordInput = new Input({
-  class: 'form-field__input',
-  name: 'password',
-  type: 'password',
-  events: {
-    blur: checkValidation('#password_tooltip', validatePassword, 'active'),
-    focus: checkValidation('#password_tooltip', validatePassword, 'active'),
+  componentDidMount() {
+    if (this.props.user.profile) {
+      Router.go('/messenger');
+    }
   }
-}).getHTML();
 
-const loginButton = new Button({
-  text: 'Авторизоваться',
-  class: 'form-controls__button primary',
-  type: 'submit',
-}).getHTML();
+  render() {
+    return template;
+  }
+}
 
-const tmpl = Handlebars.compile(template);
-export default tmpl({
-  loginInput,
-  passwordInput,
-  loginButton,
-});
+export default withRouter(connect((state: any) => ({user: state.user || {}}), Auth));
