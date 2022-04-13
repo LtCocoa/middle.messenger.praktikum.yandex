@@ -48,7 +48,7 @@ export default `
             </div>
           </div>
           <div class="messenger-area__footer">
-            {{{ Input type="text" ref="messageText" cssClass="input" }}}
+            {{{ Input type="text" ref="messageText" cssClass="message-input" }}}
             {{{ Button text="Send" onClick=sendMessage cssClass="send-button" }}}
           </div>
         </div>

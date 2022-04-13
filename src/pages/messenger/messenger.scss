@@ -126,6 +126,35 @@
       height: 75px;
       display: flex;
       align-items: center;
+      box-shadow: 0 -5px 5px rgb(0 0 0 / 30%);
+      padding: 10px;
+
+      .message-input {
+        width: 100%;
+        padding: 5px 10px;
+        color: $font-caption-dark;
+        border-radius: 5px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        background-color: $background-gray;
+        transition: border-color .1s ease-out;
+
+        &:focus {
+          border-color: $base-color;
+        }
+      }
+
+      .send-button {
+        padding: 7px 10px;
+        margin-left: 10px;
+        border-radius: 5px;
+        border: 0;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $base-color;
+          color: white;
+        }
+      }
     }
 
     .message-list-wrapper {
@@ -144,11 +173,11 @@
           --max-width: 30rem;
           display: flex;
           margin-bottom: 10px;
-          
+
           &.own {
             flex-direction: row-reverse;
           }
-          
+
           .message-list-item__content {
             background-color: $background-gray;
             border-radius: 8px;
@@ -185,12 +214,12 @@
 
     .chat-user-list {
       flex: 1;
-      
+
       .chat-user {
         display: flex;
         padding: 10px;
         align-items: center;
-  
+
         .chat-user__avatar {
           margin-right: 10px;
         }
@@ -213,7 +242,7 @@
     align-items: center;
     justify-content: center;
     margin: 10px 0;
-    
+
     .create-chat-button {
       cursor: pointer;
 
