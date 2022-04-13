@@ -1,21 +1,32 @@
 import {
   Auth,
   Registration,
-  Chats,
-  UserProfile,
-  Error404,
-  Error500
+  Messenger,
+  UserProfile
 } from './pages/index';
 import { Router } from './router/Router';
+import registerComponent from './utils/registerComponent';
+import Block from './components/Block';
+import AuthController from './controllers/AuthController';
 
 import './css/index.scss';
 
-const router = new Router('#root');
-router
-  .use('/', Auth)
-  .use('/sign-up', Registration)
-  .use('/messenger', Chats)
-  .use('/settings', UserProfile)
-  .use('/404', Error404)
-  .use('/500', Error500)
-  .start();
+const components = require('./components/**/index.ts') as {
+  [key: string]: { default: typeof Block }
+};
+
+Object.values(components).forEach((component) => {
+  registerComponent(component.default);
+});
+
+const router = new Router();
+
+AuthController.getUserInfo()
+  .then(() => {
+    router
+      .use('/', Auth)
+      .use('/sign-up', Registration)
+      .use('/messenger', Messenger)
+      .use('/profile', UserProfile)
+      .start();
+  });

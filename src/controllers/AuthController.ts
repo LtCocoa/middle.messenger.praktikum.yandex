@@ -1,7 +1,7 @@
-import { AuthAPI } from '../api/auth-api';
+import { AuthAPI, UserData } from '../api/AuthAPI';
 import { Router } from '../router/Router';
-
-const authAPI = new AuthAPI();
+import { store } from '../store';
+import { deleteUser, setError, setUser } from '../store/user';
 
 export type SignInFormData = {
   login: string;
@@ -18,22 +18,31 @@ export type SignUpFormData = {
   phone: string
 }
 
-export class AuthController {
+class AuthController {
+  private api: AuthAPI;
+
+  constructor() {
+    this.api = new AuthAPI();
+  }
+
   public signin(data: SignInFormData) {
-    authAPI.signin(data)
+    this.api.signin(data)
       .then(() => {
-        Router.__instance.go('/messenger');
+        this.getUserInfo().then(() => Router.go('/messenger'));
       })
       .catch(error => {
-        console.warn(error.reason);
+        store.dispatch(setError(error as { reason: string }));
       });
   }
 
   public signup(data: SignUpFormData) {
-    const { repeat_password, ...params } = data;
-    authAPI.signup(params)
-      .then(() => {
-        Router.__instance.go('/messenger');
+    const { repeat_password, password, ...params } = data;
+    if (repeat_password !== password) {
+      return Promise.reject('Пароли не совпадают');
+    }
+    this.api.signup({ ...params, password })
+      .then((userID) => {
+        this.api.getUserInfo().then(() => Router.go('/messenger'));
       })
       .catch(error => {
         console.warn(error.reason);
@@ -41,22 +50,28 @@ export class AuthController {
   }
 
   public logout() {
-    authAPI.logout()
+    this.api.logout()
       .then(() => {
-        Router.__instance.go('/');
+        store.dispatch(deleteUser());
+        Router.go('/');
       })
       .catch(error => {
-        console.warn(error.reason);
+        store.dispatch(setError(error as { reason: string }));
       });
   }
 
-  public getUserInfo() {
-    return authAPI.getUserInfo()
-      .then(info => {
-        return JSON.parse(info.response);
+  public getUserInfo(): Promise<UserData | void> {
+    return this.api.getUserInfo()
+      .then(user => {
+        user.avatar = `${this.api.http.baseUrl}/resources/${user.avatar}`;
+        store.dispatch(setUser(user));
+        return user;
       })
       .catch(error => {
-        console.warn(error.reason);
+        Router.go('/');
+        store.dispatch(deleteUser());
       });
   }
 }
+
+export default new AuthController();

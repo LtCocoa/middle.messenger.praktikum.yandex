@@ -1,33 +1,55 @@
-import Handlebars from 'handlebars';
 import template from './auth.tmpl';
 import Block from '../../components/Block';
-import LoginForm from '../../components/LoginForm/LoginForm';
-import { AuthController } from '../../controllers/AuthController';
+import AuthController from '../../controllers/AuthController';
+import { Router } from '../../router/Router';
+import {
+  validateLogin,
+  validatePassword,
+  checkValidation
+} from '../../utils/Validators';
+import { connect } from '../../store/index';
+import { withRouter } from '../../router/Router';
 
-const tmpl = Handlebars.compile(template);
-const controller = new AuthController();
 
-export class Auth extends Block {
-  constructor() {
-    super('div');
+class Auth extends Block {
+  getStateFromProps() {
+    this.state = {
+      signinButtonClick: () => {
+        const data = {};
+
+        Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
+          data[key] = input.value;
+        });
+
+        AuthController.signin({
+          login: data.login,
+          password: data.password
+        });
+      },
+
+      signupButtonClick: () => {
+        Router.go('/sign-up');
+      },
+
+      loginValidation: (event: Event) => {
+        checkValidation('#login_tooltip', validateLogin, 'active')(event);
+      },
+
+      passwordValidation: (event: Event) => {
+        checkValidation('#password_tooltip', validatePassword, 'active')(event);
+      },
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.user.profile) {
+      Router.go('/messenger');
+    }
   }
 
   render() {
-    return tmpl({
-      id: this._id,
-      loginForm
-    });
+    return template;
   }
 }
 
-const loginForm = new LoginForm({
-  events: {
-    submit: (event: Event) => {
-      event.preventDefault();
-      const data = new FormData(event.target);
-      const [login, password] = [...data.values()];
-      const params = { login: login.toString(), password: password.toString() };
-      controller.signin(params);
-    }
-  }
-}).getHTML();
+export default withRouter(connect((state: any) => ({user: state.user || {}}), Auth));

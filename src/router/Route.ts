@@ -6,8 +6,10 @@ function isEqual(lhs: string, rhs: string) {
 
 function render(query: string, block: Block) {
   const root = document.querySelector(query);
+  
   if (root) {
-    root.innerHTML = block.getHTML();
+    root.innerHTML = '';
+    root.appendChild(block.getContent());
   }
   return root;
 }

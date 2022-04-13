@@ -6,10 +6,9 @@ export class Router {
   routes: Route[];
   history: History;
   _currentRoute: Route | null;
-  _rootQuery: string;
   _history: History;
 
-  constructor(rootQuery: string) {
+  constructor() {
       if (Router.__instance) {
         return Router.__instance;
       }
@@ -17,13 +16,12 @@ export class Router {
       this.routes = [];
       this._history = window.history;
       this._currentRoute = null;
-      this._rootQuery = rootQuery;
 
       Router.__instance = this;
   }
 
   use(pathname: string, block: typeof Block): Router {
-    const route = new Route(pathname, block, {rootQuery: this._rootQuery});
+    const route = new Route(pathname, block, {rootQuery: '#root'});
     this.routes.push(route);
     return this;
   }
@@ -53,6 +51,10 @@ export class Router {
     this._onRoute(pathname);
   }
 
+  static go(pathhame: string): void {
+    this.__instance.go(pathhame);
+  }
+
   back(): void {
     this._history.back();
   }
@@ -64,4 +66,14 @@ export class Router {
   getRoute(pathname: string): Route | null{
     return this.routes.find(route => route.match(pathname)) as Route;
   }
+}
+
+export function withRouter(Component: typeof Block) {
+  return class WithRouter extends Component {
+    constructor(props: any) {
+      const router = new Router();
+
+      super({...props, router: router});
+    }
+  };
 }

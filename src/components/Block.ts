@@ -1,5 +1,10 @@
 import EventBus from '../utils/EventBus';
 import { v4 } from 'uuid';
+import Handlebars from 'handlebars';
+
+interface BlockMeta<P = any> {
+  props: P;
+}
 
 export default class Block<P = any> {
   static EVENTS: {
@@ -14,23 +19,26 @@ export default class Block<P = any> {
   _element: HTMLElement | null;
   _id: string;
 
-  _meta: {
-    tagName: string,
-    props: object
-  } | null = null;
+  private readonly _meta: BlockMeta;
+
+  protected children: {[id: string]: Block} = {};
+  protected state: any = {};
+  protected refs: {[key: string]: HTMLElement} = {};
 
   protected readonly props: P;
   eventBus: EventBus;
 
-  constructor(tagName: string = 'div', props: object = {}) {
+  public constructor(props?: P) {
     this.eventBus = new EventBus();
     
     this._meta = {
-      tagName,
       props
     };
 
-    this.props = this._makeProxyProps(props);
+    this.getStateFromProps(props);
+
+    this.props = this._makeProxyProps(props || {} as P);
+    this.state = this._makeProxyProps(this.state);
     
     this._id = v4();
     this._registerEvents(this.eventBus);
@@ -44,16 +52,23 @@ export default class Block<P = any> {
     eventBus.on(Block.EVENTS.RENDER, this._render.bind(this));
   }
 
-  _render() {
-    const block = this.render();
-
-    if (this._element) {
-      this._element.innerHTML = block;
-      this._addEvents();
-    }
+  protected getStateFromProps(props: any): void {
+    this.state = {};
   }
 
-  _makeProxyProps(props: object): object {
+  _render() {
+    const fragment = this._compile();
+    
+    this._removeEvents();
+    const newElement = fragment.firstElementChild!;
+
+    this._element!.replaceWith(newElement);
+
+    this._element = newElement as HTMLElement;
+    this._addEvents();
+  }
+
+  _makeProxyProps(props: any): any {
     return new Proxy(props, {
       set: (target: Record<string, any>, prop: string, value: any) => {
         target[prop] = value;
@@ -70,16 +85,26 @@ export default class Block<P = any> {
   }
 
   _addEvents() {
-    const { events = {} } = this.props;
+    const events: Record<string, () => void> = (this.props as any).events;
 
-    Object.keys(events).forEach(eventName => {
-      document.addEventListener(eventName, (event) => {
-        const uuid = (event.target as HTMLElement).getAttribute('uuid');
-        if (uuid === this._id) {
-          const handler = events[eventName].bind(this);
-          handler(event);
-        }
-      }, true);
+    if (!events) {
+      return;
+    }
+
+    Object.entries(events).forEach(([event, listener]) => {
+      this._element!.addEventListener(event, listener);
+    });
+  }
+
+  _removeEvents() {
+    const events: Record<string, () => void> = (this.props as any).events;
+
+    if (!events || !this._element) {
+      return;
+    }
+
+    Object.entries(events).forEach(([event, listener]) => {
+      this._element!.removeEventListener(event, listener);
     });
   }
 
@@ -87,25 +112,58 @@ export default class Block<P = any> {
     return document.createElement(tagName);
   }
 
-  _componentDidUpdate(oldProps: object, newProps: object) {
-    console.log('updated');
+  _componentDidUpdate(oldProps: P, newProps: P) {
     const didUpate = this.componentDidUpdate(oldProps, newProps);
     if (didUpate) {
-      this.eventBus.emit(Block.EVENTS.RENDER);
+      this._render();
     }
   }
 
-  _componentDidMount() {
-    this.componentDidMount();
-    this.eventBus.emit(Block.EVENTS.RENDER);
+  _componentDidMount(props: P) {
+    this.componentDidMount(props);
   }
 
   _createResources() {
-    if (!this._meta) {
-      throw new Error('No meta provided');
-    };
-    const { tagName } = this._meta;
-    this._element = this._createDocumentElement(tagName);
+    this._element = this._createDocumentElement('div');
+  }
+
+  _compile(): DocumentFragment {
+    const fragment = document.createElement('template');
+
+    const trimmedTemplate = this.render().trim();
+
+    const template = Handlebars.compile(trimmedTemplate);
+    fragment.innerHTML = template({
+      ...this.state,
+      ...this.props,
+      children: this.children,
+      refs: this.refs,
+      id: this._id
+    });
+
+    /**
+     * Заменяем заглушки на компоненты
+     */
+    Object.entries(this.children).forEach(([id, component]) => {
+      /**
+       * Ищем заглушку по id
+       */
+      const stub = fragment.content.querySelector(`[uuid="${id}"]`);
+
+      if (!stub) {
+        return;
+      }
+
+      /**
+       * Заменяем заглушку на component._element
+       */
+      stub.replaceWith(component.getContent());
+    });
+
+    /**
+     * Возвращаем фрагмент
+     */
+    return fragment.content;
   }
 
   get element() {
@@ -114,25 +172,42 @@ export default class Block<P = any> {
 
   init() {
     this._createResources();
-    this.eventBus.emit(Block.EVENTS.COMPONENT_DID_MOUNT);
+    this.eventBus.emit(Block.EVENTS.RENDER);
   }
 
-  getContent() {
-    return this.element;
+  getContent(): HTMLElement {
+    if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+      setTimeout(() => {
+        if (this.element?.parentNode?.nodeType !==  Node.DOCUMENT_FRAGMENT_NODE ) {
+          this.eventBus.emit(Block.EVENTS.COMPONENT_DID_MOUNT);
+        }
+      }, 100);
+    }
+
+    return this.element!;
   }
+
+  setState = (nextState: any) => {
+    if (!nextState) {
+      return;
+    }
+
+    Object.assign(this.state, nextState);
+  };
 
   getHTML(): string {
     return (this.getContent() as HTMLElement).innerHTML;
   }
 
-  render(): any {}
+  protected render(): string {
+    return '';
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  componentDidUpdate(oldProps: object, newProps: object): boolean {
+  componentDidUpdate(oldProps: P, newProps: P): boolean {
     return true;
   }
 
-  componentDidMount() {}
+  componentDidMount(props: P) {}
 
   setProps = (nextProps: object): void => {
     if (!nextProps) {
@@ -140,6 +215,6 @@ export default class Block<P = any> {
     }
 
     Object.assign(this.props, nextProps);
-    this.eventBus.emit(Block.EVENTS.COMPONENT_DID_UPDATE);
-  };
+  };  
 }
+
