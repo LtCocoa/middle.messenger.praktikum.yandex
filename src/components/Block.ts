@@ -16,7 +16,7 @@ export default class Block<P = any> {
     RENDER: 'render',
   }
 
-  _element: HTMLElement | null;
+  _element: HTMLElement | null = null;
   _id: string;
 
   private readonly _meta: BlockMeta;
@@ -52,6 +52,7 @@ export default class Block<P = any> {
     eventBus.on(Block.EVENTS.RENDER, this._render.bind(this));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getStateFromProps(props: any): void {
     this.state = {};
   }
@@ -203,10 +204,12 @@ export default class Block<P = any> {
     return '';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidUpdate(oldProps: P, newProps: P): boolean {
     return true;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   componentDidMount(props: P) {}
 
   setProps = (nextProps: object): void => {

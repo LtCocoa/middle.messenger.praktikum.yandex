@@ -14,18 +14,22 @@ export class UserProfile extends Block {
         AuthController.logout();
       },
       saveUserAvatar: () => {
-        const avatar = document.getElementById('avatar');
+        const avatar: HTMLElement | null = document.getElementById('avatar');
         const form = new FormData();
-        form.append('avatar', avatar.files[0]);
-        UserController.uploadAvatar(form).then(() => {
-          AuthController.getUserInfo();
-        });
+        if (avatar) {
+          const files = (avatar as HTMLInputElement).files;
+          if (!files?.length) return;
+          form.append('avatar', files[0]);
+          UserController.uploadAvatar(form).then(() => {
+            AuthController.getUserInfo();
+          });
+        }
       },
       image: () => {
         return this.props.user?.avatar ? this.props.user?.avatar : avatarPlaceholder;
       },
       saveUserData: () => {
-        const data = {};
+        const data: any = {};
 
         Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
           data[key] = input.value;
@@ -34,13 +38,13 @@ export class UserProfile extends Block {
         UserController.changeUserData(data);
       },
       showModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#modal');
-        modal?.showModal();
+        const modal: any = document.querySelector('#modal');
+        modal!.showModal();
       },
       changePassword: () => {
-        const oldPassword = this.refs.oldPassword.value;
-        const newPassword = this.refs.newPassword.value;
-        const repeatNewPassword = this.refs.repeatNewPassword.value;
+        const oldPassword = (this.refs.oldPassword as HTMLInputElement).value;
+        const newPassword = (this.refs.newPassword as HTMLInputElement).value;
+        const repeatNewPassword = (this.refs.repeatNewPassword as HTMLInputElement).value;
 
         if (newPassword !== repeatNewPassword) {
           return;
@@ -55,8 +59,8 @@ export class UserProfile extends Block {
         });
       },
       cancelChangePassword: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#modal');
-        modal?.close();
+        const modal: any = document.querySelector('#modal');
+        modal!.close();
       }
     };
   }

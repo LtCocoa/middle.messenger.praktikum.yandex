@@ -4,7 +4,7 @@ import { addMessage, setChat, setMessages, setChatUsers } from '../store/chat';
 
 class ChatsController {
   private api: ChatsAPI;
-  private chatToken: string;
+  private chatToken: string | null = null;
 
   constructor() {
     this.api = new ChatsAPI();
@@ -35,7 +35,7 @@ class ChatsController {
 
   protected openWebSocket() {
     const {user, chat} = store.getState();
-    this.api.openWebSocket(user.profile.id, chat.chatData.id, this.chatToken, this.onReceiveMessage);
+    this.api.openWebSocket(user.profile.id, chat.chatData.id, this.chatToken!, this.onReceiveMessage);
   }
 
   onReceiveMessage = (event: any): void => {
@@ -49,7 +49,7 @@ class ChatsController {
   }
 
   public fetchChatUsers(chatId: number) {
-    return this.api.fetchChatUsers(chatId).then(users => {
+    return this.api.fetchChatUsers(chatId).then((users: any) => {
       store.dispatch(setChatUsers(users));
     });
   }

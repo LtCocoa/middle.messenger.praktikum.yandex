@@ -15,7 +15,7 @@ class Auth extends Block {
   getStateFromProps() {
     this.state = {
       signinButtonClick: () => {
-        const data = {};
+        const data: any = {};
 
         Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
           data[key] = input.value;

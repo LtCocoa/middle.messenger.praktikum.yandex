@@ -3,19 +3,14 @@ import { Route } from './Route';
 
 export class Router {
   static __instance: Router;
-  routes: Route[];
-  history: History;
-  _currentRoute: Route | null;
-  _history: History;
+  routes: Route[] = [];
+  history: History = window.history;
+  _currentRoute: Route | null = null;
 
   constructor() {
       if (Router.__instance) {
         return Router.__instance;
       }
-
-      this.routes = [];
-      this._history = window.history;
-      this._currentRoute = null;
 
       Router.__instance = this;
   }
@@ -27,7 +22,7 @@ export class Router {
   }
 
   start(): void {
-    window.onpopstate = (event: Event) => {
+    window.onpopstate = (event: any) => {
       this._onRoute(event.currentTarget.location.pathname);
     };
 
@@ -47,7 +42,7 @@ export class Router {
   }
 
   go(pathname: string): void {
-    this._history.pushState({}, '', pathname);
+    this.history.pushState({}, '', pathname);
     this._onRoute(pathname);
   }
 
@@ -56,11 +51,11 @@ export class Router {
   }
 
   back(): void {
-    this._history.back();
+    this.history.back();
   }
 
   forward(): void {
-    this._history.forward();
+    this.history.forward();
   }
 
   getRoute(pathname: string): Route | null{

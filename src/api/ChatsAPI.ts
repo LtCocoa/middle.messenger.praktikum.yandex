@@ -15,7 +15,7 @@ export type MessageData = {
 }
 
 export class ChatsAPI extends BaseAPI {
-  private socket: WebSocket;
+  private socket: WebSocket | null = null;
 
   constructor() {
     super('chats');
@@ -35,7 +35,7 @@ export class ChatsAPI extends BaseAPI {
     this.socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${chatID}/${userID}/${token}`);
 
     this.socket.addEventListener('open', () => {
-      this.socket.send(JSON.stringify({
+      this.socket!.send(JSON.stringify({
         content: '0',
         type: 'get old',
       }));
@@ -53,7 +53,7 @@ export class ChatsAPI extends BaseAPI {
 
     this.socket.addEventListener('message', getMessage);
 
-    this.socket.addEventListener('error', event => {
+    this.socket.addEventListener('error', (event: any) => {
       console.log('Ошибка', event.message);
     });
   }
@@ -67,7 +67,7 @@ export class ChatsAPI extends BaseAPI {
   }
 
   sendMessage(message: string) {
-    this.socket.send(JSON.stringify({
+    this.socket!.send(JSON.stringify({
       type: 'message',
       content: message
     }));

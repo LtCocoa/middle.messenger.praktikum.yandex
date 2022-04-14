@@ -1,11 +1,7 @@
 import { UserAPI } from '../api/UserAPI';
-import { Router } from '../router/Router';
-import { store } from '../store';
-import { addMessage, setChat, setMessages } from '../store/chat';
 
 class UserController {
   private api: UserAPI;
-  private chatToken: string;
 
   constructor() {
     this.api = new UserAPI();
@@ -15,11 +11,11 @@ class UserController {
     return this.api.uploadAvatar(formData);
   }
 
-  changeUserData(data) {
+  changeUserData(data: any) {
     return this.api.changeUserData(data);
   }
 
-  changeUserPassword(data) {
+  changeUserPassword(data: any) {
     return this.api.changeUserPassword(data);
   }
 }

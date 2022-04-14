@@ -11,27 +11,26 @@ class Messenger extends Block {
     this.state = {
       chats: [],
       sendMessage: () => {
-        const message = this.refs.messageText.value.trim();
+        const message = (this.refs.messageText as HTMLInputElement).value.trim();
         if (message) {
           ChatsController.sendMessage(message);
-          this.refs.messageText.value = '';
+          (this.refs.messageText as HTMLInputElement).value = '';
         }
       },
       isOwnMessage: (data: any) => {
-        console.log(data);
         const id = data.user_id ? data.user_id : data.userId;
         return id === this.props.user.profile.id ? 'own' : '';
       },
       openNewChatModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#new_chat_modal');
-        modal?.showModal();
+        const modal: any = document.querySelector('#new_chat_modal');
+        modal!.showModal();
       },
       closeNewChatModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#new_chat_modal');
-        modal?.close();
+        const modal: any = document.querySelector('#new_chat_modal');
+        modal!.close();
       },
       createChat: () => {
-        const title = this.refs.title.value;
+        const title = (this.refs.title as HTMLInputElement).value;
         ChatsController.createChat(title).then(() => {
           this.fetchChats();
         });
@@ -40,20 +39,23 @@ class Messenger extends Block {
         return endpoint ? `https://ya-praktikum.tech/api/v2/resources/${endpoint}` : avatarPlaceholder;
       },
       openAddUserModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#add_user_modal');
-        modal?.showModal();
+        const modal: any = document.querySelector('#add_user_modal');
+        modal!.showModal();
       },
       closeAddUserModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#add_user_modal');
-        modal?.close();
+        const modal: any = document.querySelector('#add_user_modal');
+        modal!.close();
       },
       addUser: () => {
-        const userId = Number(this.refs.userId.value);
+        const userId = Number((this.refs.userId as HTMLInputElement).value);
         ChatsController.addUserToChat(userId, this.props.chat.chatData.id);
       },
-      messageAuthor: (messageData) => {
-        const user = this.props.chat.chatUsers.find(user => user.id === messageData.user_id);
+      messageAuthor: (messageData: any) => {
+        const user = this.props.chat.chatUsers.find((user: any) => user.id === messageData.user_id);
         return user?.display_name ? user?.display_name : user?.first_name;
+      },
+      goToProfile: () => {
+        Router.go('/profile');
       }
     };
   }
