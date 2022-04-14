@@ -18,7 +18,6 @@ class Messenger extends Block {
         }
       },
       isOwnMessage: (data: any) => {
-        console.log(data);
         const id = data.user_id ? data.user_id : data.userId;
         return id === this.props.user.profile.id ? 'own' : '';
       },
@@ -54,6 +53,9 @@ class Messenger extends Block {
       messageAuthor: (messageData) => {
         const user = this.props.chat.chatUsers.find(user => user.id === messageData.user_id);
         return user?.display_name ? user?.display_name : user?.first_name;
+      },
+      goToProfile: () => {
+        Router.go('/profile');
       }
     };
   }
