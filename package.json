@@ -17,12 +17,6 @@
     "type": "git",
     "url": "git+https://github.com/LtCocoa/middle.messenger.praktikum.yandex.git"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-fix",
-      "pre-push": "npm run other command"
-    }
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
