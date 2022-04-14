@@ -38,8 +38,8 @@ export class UserProfile extends Block {
         UserController.changeUserData(data);
       },
       showModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#modal');
-        modal?.showModal();
+        const modal: any = document.querySelector('#modal');
+        modal!.showModal();
       },
       changePassword: () => {
         const oldPassword = (this.refs.oldPassword as HTMLInputElement).value;
@@ -59,8 +59,8 @@ export class UserProfile extends Block {
         });
       },
       cancelChangePassword: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#modal');
-        modal?.close();
+        const modal: any = document.querySelector('#modal');
+        modal!.close();
       }
     };
   }

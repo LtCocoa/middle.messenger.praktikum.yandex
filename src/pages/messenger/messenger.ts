@@ -22,12 +22,12 @@ class Messenger extends Block {
         return id === this.props.user.profile.id ? 'own' : '';
       },
       openNewChatModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#new_chat_modal');
-        modal?.showModal();
+        const modal: any = document.querySelector('#new_chat_modal');
+        modal!.showModal();
       },
       closeNewChatModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#new_chat_modal');
-        modal?.close();
+        const modal: any = document.querySelector('#new_chat_modal');
+        modal!.close();
       },
       createChat: () => {
         const title = (this.refs.title as HTMLInputElement).value;
@@ -39,12 +39,12 @@ class Messenger extends Block {
         return endpoint ? `https://ya-praktikum.tech/api/v2/resources/${endpoint}` : avatarPlaceholder;
       },
       openAddUserModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#add_user_modal');
-        modal?.showModal();
+        const modal: any = document.querySelector('#add_user_modal');
+        modal!.showModal();
       },
       closeAddUserModal: () => {
-        const modal: HTMLDialogElement | null = document.querySelector('#add_user_modal');
-        modal?.close();
+        const modal: any = document.querySelector('#add_user_modal');
+        modal!.close();
       },
       addUser: () => {
         const userId = Number((this.refs.userId as HTMLInputElement).value);
