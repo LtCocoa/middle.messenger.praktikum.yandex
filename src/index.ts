@@ -6,13 +6,21 @@ import {
 } from './pages/index';
 import { Router } from './router/Router';
 import registerComponent from './utils/registerComponent';
-import Block from './components/Block';
 import AuthController from './controllers/AuthController';
 
 import './css/index.scss';
 
-console.log(require);
-const components = require.context('./components', true, /^index.ts$/);
+const Button = require('./components/Button/index.ts');
+const Link = require('./components/Link/index.ts');
+const Input = require('./components/Input/index.ts');
+const Chat = require('./components/Chat/index.ts');
+
+const components = {
+  Button,
+  Link,
+  Input,
+  Chat
+};
 
 Object.values(components).forEach((component) => {
   registerComponent(component.default);
