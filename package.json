@@ -4,7 +4,7 @@
   "description": "---",
   "main": "index.ts",
   "scripts": {
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --no-minify",
     "start-server": "node src/server.js",
     "start": "parcel index.html --port 3000 --no-cache",
     "lint": "eslint src/**",

@@ -24,7 +24,11 @@ export default `
         </div>
         <div class="user-info">
           <div>
-            <a href="/profile" class="user-info__name">{{user.profile.first_name}}</a>
+          {{{ Link
+            text=user.profile.first_name
+            cssClass="user-info__name"
+            onClick=goToProfile
+          }}}
           </div>
         </div>
       </div>
