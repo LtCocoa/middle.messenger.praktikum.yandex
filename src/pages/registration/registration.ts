@@ -32,7 +32,7 @@ export class Registration extends Block {
         };
 
         Object.entries(this.refs as {[key: string]: HTMLInputElement}).forEach(([key, input]) => {
-          data[key] = input.value;
+          (data as any)[key] = input.value;
         });
   
         AuthController.signup(data);

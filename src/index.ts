@@ -11,9 +11,8 @@ import AuthController from './controllers/AuthController';
 
 import './css/index.scss';
 
-const components = require('./components/**/index.ts') as {
-  [key: string]: { default: typeof Block }
-};
+console.log(require);
+const components = require.context('./components', true, /^index.ts$/);
 
 Object.values(components).forEach((component) => {
   registerComponent(component.default);

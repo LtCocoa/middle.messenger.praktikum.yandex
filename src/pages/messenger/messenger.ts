@@ -11,10 +11,10 @@ class Messenger extends Block {
     this.state = {
       chats: [],
       sendMessage: () => {
-        const message = this.refs.messageText.value.trim();
+        const message = (this.refs.messageText as HTMLInputElement).value.trim();
         if (message) {
           ChatsController.sendMessage(message);
-          this.refs.messageText.value = '';
+          (this.refs.messageText as HTMLInputElement).value = '';
         }
       },
       isOwnMessage: (data: any) => {
@@ -30,7 +30,7 @@ class Messenger extends Block {
         modal?.close();
       },
       createChat: () => {
-        const title = this.refs.title.value;
+        const title = (this.refs.title as HTMLInputElement).value;
         ChatsController.createChat(title).then(() => {
           this.fetchChats();
         });
@@ -47,11 +47,11 @@ class Messenger extends Block {
         modal?.close();
       },
       addUser: () => {
-        const userId = Number(this.refs.userId.value);
+        const userId = Number((this.refs.userId as HTMLInputElement).value);
         ChatsController.addUserToChat(userId, this.props.chat.chatData.id);
       },
-      messageAuthor: (messageData) => {
-        const user = this.props.chat.chatUsers.find(user => user.id === messageData.user_id);
+      messageAuthor: (messageData: any) => {
+        const user = this.props.chat.chatUsers.find((user: any) => user.id === messageData.user_id);
         return user?.display_name ? user?.display_name : user?.first_name;
       },
       goToProfile: () => {

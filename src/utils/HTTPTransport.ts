@@ -1,4 +1,4 @@
-import { queryString, PlainObject } from './utils';
+import { PlainObject } from './utils';
 
 enum METHODS {
   GET = 'GET',
@@ -6,17 +6,6 @@ enum METHODS {
   PUT = 'PUT',
   DELETE = 'DELETE',
 };
-
-function queryStringify(data: object): string {
-  if (typeof data !== 'object') {
-    throw new Error('Data must be object');
-  }
-
-  const keys = Object.keys(data);
-  return keys.reduce((result, key, index) => {
-    return `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`;
-  }, '?');
-}
 
 type RequestOptions = {
   headers?: object;
@@ -89,10 +78,10 @@ export class HTTPTransport {
 
       xhr.withCredentials = true;
 
-      if (headers['content-type'] !== 'multipart/form-data') {
-        xhr.setRequestHeader('content-type', headers['content-type']);
+      if ((headers as any)['content-type'] !== 'multipart/form-data') {
+        xhr.setRequestHeader('content-type', (headers as any)['content-type']);
       }
-      xhr.setRequestHeader('accept', headers['accept']);
+      xhr.setRequestHeader('accept', (headers as any)['accept']);
       
       xhr.responseType = 'json';
     
@@ -114,8 +103,8 @@ export class HTTPTransport {
 
       if (options.method === METHODS.GET) {
         xhr.send();
-      } else if (headers['content-type'] === 'multipart/form-data') {
-        xhr.send(data);
+      } else if ((headers as any)['content-type'] === 'multipart/form-data') {
+        xhr.send(data as FormData);
       }
       else {
         xhr.send(JSON.stringify(data));

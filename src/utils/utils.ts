@@ -5,7 +5,7 @@ export type PlainObject<T = unknown> = {
 export function get(obj: object, path: string, defaultValue?: any) {
   const keys: string[] = path.split('.');
 
-  let result: object = obj;
+  let result: any = obj;
   for (let key of keys) {
     result = result[key];
 

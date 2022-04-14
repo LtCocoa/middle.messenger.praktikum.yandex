@@ -18,7 +18,7 @@ export class Route {
   _pathname: string;
   _blockClass: typeof Block;
   _block: Block | null;
-  _props: object;
+  _props: any;
 
   constructor(pathname: string, view: typeof Block, props: object) {
     this._pathname = pathname;
